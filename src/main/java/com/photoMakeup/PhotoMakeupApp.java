@@ -53,7 +53,7 @@ public class PhotoMakeupApp extends Application {
 
         try {
             // Вариант 1: Если иконка в resources
-            Image icon = new Image(getClass().getResourceAsStream("/marker.png"));
+            Image icon = new Image(getClass().getResourceAsStream("/marker-128.png"));
             stage.getIcons().add(icon);
         } catch (Exception e) {
             // Если файл не найден, просто пропускаем
