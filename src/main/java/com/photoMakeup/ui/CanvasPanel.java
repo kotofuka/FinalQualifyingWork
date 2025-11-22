@@ -216,7 +216,7 @@ public class CanvasPanel extends StackPane {
             gc.drawImage(currentImage, panX, panY, scaledWidth, scaledHeight);
         }
 
-        gc.setStroke(Color.web("#0066cc"));
+        gc.setStroke(Color.web("#ff0000"));
         gc.setLineWidth(2.0);
         for (Rectangle rectangle : rectangles) {
             drawRectangle(gc, rectangle);
