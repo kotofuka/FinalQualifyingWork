@@ -70,6 +70,15 @@ public class PhotoMakeupApp extends Application {
 
         Scene scene = new Scene(root, 1600, 900);
         stage.setTitle("PhotoMakeup - Разметка и нормализация фотографий");
+
+        try {
+            Image icon = new Image(getClass().getResourceAsStream("/marker-128.png"));
+            stage.getIcons().add(icon);
+        } catch (Exception e) {
+            // Если файл не найден, просто пропускаем
+            System.out.println("Иконка не найдена: " + e.getMessage());
+        }
+
         stage.setScene(scene);
         stage.show();
 
@@ -273,8 +282,7 @@ public class PhotoMakeupApp extends Application {
             imageService.openImageDialog(canvasPanel);
             statusLabel.setText("✅ Изображение загружено");
 
-            // ✅ ИСПРАВЛЕНО: Конвертируем Image → Mat безопасно
-            Image fxImage = canvasPanel.getCurrentImage();  // Нужно добавить этот getter в CanvasPanel!
+            Image fxImage = canvasPanel.getCurrentImage();
 
             if (fxImage != null) {
                 currentMatImage = convertImageToMat(fxImage);
@@ -338,7 +346,6 @@ public class PhotoMakeupApp extends Application {
         CompletableFuture.runAsync(() -> {
             try {
                 // Вызываем сервис обнаружения
-                // todo
                 detectedCorners = detectionService.detectDocumentCorners(currentMatImage);
 
                 // Возвращаемся в поток JavaFX для обновления UI
@@ -434,48 +441,7 @@ public class PhotoMakeupApp extends Application {
             logger.warn("Попытка сохранить без результата нормализации");
             return;
         }
-
-        javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
-        fileChooser.setTitle("Сохранить нормализованное изображение");
-        fileChooser.getExtensionFilters().addAll(
-                new javafx.stage.FileChooser.ExtensionFilter("PNG файлы", "*.png"),
-                new javafx.stage.FileChooser.ExtensionFilter("JPG файлы", "*.jpg", "*.jpeg"),
-                new javafx.stage.FileChooser.ExtensionFilter("Все файлы", "*.*")
-        );
-        fileChooser.setInitialFileName("normalized.png");
-
-        javafx.stage.Stage stage = new javafx.stage.Stage();
-        java.io.File selectedFile = fileChooser.showSaveDialog(stage);
-
-        if (selectedFile != null) {
-            try {
-                // Определяем расширение файла
-                String fileName = selectedFile.getAbsolutePath();
-                String extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-
-                // Кодируем в файл
-                boolean success;
-                if (extension.equals("png")) {
-                    success = Imgcodecs.imwrite(fileName, normalizedImage);
-                } else if (extension.equals("jpg") || extension.equals("jpeg")) {
-                    success = Imgcodecs.imwrite(fileName, normalizedImage);
-                } else {
-                    // По умолчанию используем PNG
-                    success = Imgcodecs.imwrite(fileName + ".png", normalizedImage);
-                }
-
-                if (success) {
-                    statusLabel.setText("✅ Результат сохранён: " + selectedFile.getAbsolutePath());
-                    logger.info("Результат нормализации сохранён: {}", selectedFile.getAbsolutePath());
-                } else {
-                    statusLabel.setText("❌ Ошибка при сохранении файла");
-                    logger.error("Ошибка при сохранении файла OpenCV");
-                }
-            } catch (Exception e) {
-                statusLabel.setText("❌ Ошибка: " + e.getMessage());
-                logger.error("Ошибка при сохранении нормализованного изображения", e);
-            }
-        }
+        imageService.saveNormalizedImage(normalizedImage);
     }
 
     private Mat convertImageToMat(Image fxImage) {

@@ -7,6 +7,8 @@ import com.photoMakeup.ui.CanvasPanel;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +23,7 @@ import java.util.Map;
 public class ImageService {
     private static final Logger logger = LoggerFactory.getLogger(ImageService.class);
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private File file;
 
     public void openImageDialog(CanvasPanel canvasPanel) {
         FileChooser fileChooser = new FileChooser();
@@ -35,11 +38,46 @@ public class ImageService {
 
         if (selectedFile != null) {
             try {
-                Image fxImage = new Image(selectedFile.toURI().toString());
+                file = selectedFile;
+                Image fxImage = new Image(file.toURI().toString());
                 canvasPanel.setImage(fxImage);
                 logger.info("Изображение загружено: {}", selectedFile.getAbsolutePath());
             } catch (Exception e) {
                 logger.error("Ошибка при загрузке изображения", e);
+            }
+        }
+    }
+
+    public void saveNormalizedImage(Mat normalizedImage) {
+        javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+        fileChooser.setTitle("Сохранить нормализованное изображение");
+        fileChooser.getExtensionFilters().addAll(
+                new javafx.stage.FileChooser.ExtensionFilter("PNG файлы", "*.png"),
+                new javafx.stage.FileChooser.ExtensionFilter("JPG файлы", "*.jpg", "*.jpeg"),
+                new javafx.stage.FileChooser.ExtensionFilter("Все файлы", "*.*")
+        );
+        fileChooser.setInitialFileName(String.format("%s_normalized.png", file.getName().substring(0, file.getName().lastIndexOf("."))));
+
+        javafx.stage.Stage stage = new javafx.stage.Stage();
+        java.io.File selectedFile = fileChooser.showSaveDialog(stage);
+
+        if (selectedFile != null) {
+            try {
+                // Определяем расширение файла
+                String fileName = selectedFile.getAbsolutePath();
+                String extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+
+                // Кодируем в файл
+                boolean success;
+                if (extension.equals("png")) {
+                    success = Imgcodecs.imwrite(fileName, normalizedImage);
+                } else if (extension.equals("jpg") || extension.equals("jpeg")) {
+                    success = Imgcodecs.imwrite(fileName, normalizedImage);
+                } else {
+                    success = Imgcodecs.imwrite(fileName + ".png", normalizedImage);
+                }
+            } catch (Exception e) {
+                logger.error("Ошибка при сохранении нормализованного изображения", e);
             }
         }
     }
@@ -50,7 +88,7 @@ public class ImageService {
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("JSON файлы", "*.json")
         );
-        fileChooser.setInitialFileName("marks.json");
+        fileChooser.setInitialFileName(String.format("%s_marks.json", file.getName().substring(0, file.getName().lastIndexOf("."))));
 
         Stage stage = new Stage();
         File selectedFile = fileChooser.showSaveDialog(stage);
