@@ -3,25 +3,23 @@ package com.photoMakeup.model;
 public class CornerPoint {
     private double x;
     private double y;
-    private Corner corner;
+    private Corner cornerType;  // "TOP_LEFT", "TOP_RIGHT", "BOTTOM_LEFT", "BOTTOM_RIGHT"
 
-    public CornerPoint(double x, double y, Corner corner) {
+    public CornerPoint(double x, double y, Corner cornerType) {
         this.x = x;
         this.y = y;
-        this.corner = corner;
+        this.cornerType = cornerType;
     }
 
-    public double getX() {return x;}
-    public void setX(double x) {this.x = x;}
+    public double getX() { return x; }
+    public double getY() { return y; }
+    public Corner getCornerType() { return cornerType; }
 
-    public double getY() {return y;}
-    public void setY(double y) {this.y = y;}
-
-    public Corner getCorner() {return corner;}
+    public void setX(double x) { this.x = x; }
+    public void setY(double y) { this.y = y; }
 
     @Override
     public String toString() {
-        return corner.getDescription() + " (" + (int)x + ", " + (int)y + ")";
+        return String.format("📍 %s: (%.0f, %.0f)", cornerType, x, y);
     }
-
 }

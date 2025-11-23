@@ -2,7 +2,10 @@ package com.photoMakeup.ui;
 
 import com.photoMakeup.model.Rectangle;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.Bounds;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -16,162 +19,295 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CanvasPanel extends StackPane {
-    private final Canvas canvas;
-    private Image currentImage;                        // Текущее загруженное изображение
-    private final List<Rectangle> rectangles;         // Все нарисованные прямоугольники
-    private Rectangle currentRectangle;         // Прямоугольник, который рисуется сейчас
-    private double startX, startY;              // Начальные координаты (где кликнули)
-    private double zoom = 1.0;                  // Уровень масштабирования
-    private double panX = 0, panY = 0;          // Смещение при панораме
-    private final IntegerProperty marksCount;         // Количество разметок (для UI)
+    private Canvas canvas;
+    private Image currentImage;
+    private double zoom = 1.0;
+    private double panX = 0;
+    private double panY = 0;
+
+    private Rectangle currentRectangle;
+    private double startX, startY;
+
+    private List<Rectangle> rectangles = new ArrayList<>();
+
+    private IntegerProperty marksCount = new SimpleIntegerProperty(0);
+
+    private ObjectProperty<double[]> mouseCoord = new SimpleObjectProperty<>(null);
+
+    private boolean isPanning = false;
+    private double panStartX, panStartY;
+
+    private double lastZoom = 1.0;
 
     public CanvasPanel() {
         canvas = new Canvas(800, 600);
         this.getChildren().add(canvas);
-        rectangles = new ArrayList<Rectangle>();
-        marksCount = new SimpleIntegerProperty(0);
 
         setupMouseHandlers();
+        setupScrollHandler();
+        setupKeyboardHandler();
+
+        redraw();
+    }
+
+    public Image getCurrentImage() {
+        return currentImage;
+    }
+
+    public void setImage(Image image) {
+        currentImage = image;
+        zoom = 1.0;
+        lastZoom = 1.0;
+        panX = 0;
+        panY = 0;
+        rectangles.clear();
+        marksCount.set(0);
+        mouseCoord.set(null);
+        redraw();
     }
 
     private void setupMouseHandlers() {
         canvas.setOnMousePressed(this::handleMousePressed);
         canvas.setOnMouseDragged(this::handleMouseDragged);
         canvas.setOnMouseReleased(this::handleMouseReleased);
-        canvas.setOnMouseClicked(this::handleMouseClicked);
+        canvas.setOnMouseMoved(this::handleMouseMoved);
+        canvas.setOnMouseExited(this::handleMouseExited);
+    }
+
+    private void setupScrollHandler() {
         canvas.setOnScroll(this::handleScroll);
     }
 
+    private void setupKeyboardHandler() {
+        canvas.setFocusTraversable(true);
+    }
+
     private void handleMousePressed(MouseEvent event) {
-        startX = event.getX();
-        startY = event.getY();
+        canvas.requestFocus();
+        updateMouseCoordinates(event.getX(), event.getY());
 
-        double imageX = (startX - panX) / zoom;
-        double imageY = (startY - panY) / zoom;
-
-        currentRectangle = new Rectangle(imageX, imageY, imageX, imageY);
+        if(event.isControlDown() || event.getButton() == MouseButton.MIDDLE){
+            isPanning = true;
+            panStartX = event.getX();
+            panStartY = event.getY();
+        } else if (event.getButton() == MouseButton.PRIMARY) {
+            // Начало рисования прямоугольника
+            startX = (event.getX() - panX) / zoom;
+            startY = (event.getY() - panY) / zoom;
+        } else if (event.getButton() == MouseButton.SECONDARY) {
+            // Удаление прямоугольника
+            deleteRectangleAt(event.getX(), event.getY());
+        }
     }
 
     private void handleMouseDragged(MouseEvent event) {
-        if (currentRectangle != null && event.getButton() == MouseButton.PRIMARY) {
+        updateMouseCoordinates(event.getX(), event.getY());
 
-            double currentScreenX = event.getX();
-            double currentScreenY = event.getY();
+        if(isPanning){
+            panX += event.getX() - panStartX;
+            panY += event.getY() - panStartY;
+            panStartX = event.getX();
+            panStartY = event.getY();
+            redraw();
+        } else if (event.getButton() == MouseButton.PRIMARY) {
+            double endX = (event.getX() - panX) / zoom;
+            double endY = (event.getY() - panY) / zoom;
 
-            double currentImageX = (currentScreenX - panX) / zoom;
-            double currentImageY = (currentScreenY - panY) / zoom;
+            double x1 = Math.min(startX, endX);
+            double y1 = Math.min(startY, endY);
+            double x2 = Math.max(startX, endX);
+            double y2 = Math.max(startY, endY);
 
-            double imageStartX = (startX - panX) / zoom;
-            double imageStartY = (startY - panY) / zoom;
-
-            currentRectangle = new Rectangle(
-                    imageStartX,
-                    imageStartY,
-                    currentImageX,
-                    currentImageY
-            );
-
-            draw();
+            currentRectangle = new Rectangle(x1, y1, x2 , y2);
+            redraw();
         }
     }
 
     private void handleMouseReleased(MouseEvent event) {
-        if (currentRectangle != null && event.getButton() == MouseButton.PRIMARY) {
+        updateMouseCoordinates(event.getX(), event.getY());
+
+        if(isPanning){
+            isPanning = false;
+        } else if (event.getButton() == MouseButton.PRIMARY && currentRectangle != null) {
             if (currentRectangle.getWidth() > 5 && currentRectangle.getHeight() > 5) {
                 rectangles.add(currentRectangle);
                 marksCount.set(rectangles.size());
             }
             currentRectangle = null;
-            draw();
-        }
-    }
-
-    private void handleMouseClicked(MouseEvent event) {
-        if (event.getButton() == MouseButton.SECONDARY) {
-            double clickX = (event.getX() - panX) / zoom;
-            double clickY = (event.getY() - panY) / zoom;
-
-            for (Rectangle rect : new ArrayList<>(rectangles)) {
-                if (clickX >= rect.getX1() && clickX <= rect.getX2() &&
-                        clickY >= rect.getY1() && clickY <= rect.getY2()) {
-                    rectangles.remove(rect);
-                    marksCount.set(rectangles.size());
-                    break;
-                }
-            }
-            draw();
+            redraw();
         }
     }
 
     private void handleScroll(ScrollEvent event) {
-        double delta = event.getDeltaY();
-        double factor = delta > 0 ? 1.1 : 0.9;
-        zoom *= factor;
-        zoom = Math.max(0.5, Math.min(3.0, zoom));
-        draw();
+        if (currentImage == null) return;
+
+        double mouseImageX = (event.getX() - panX) / zoom;
+        double mouseImageY = (event.getY() - panY) / zoom;
+
+        double zoomFactor = event.getDeltaY() > 0 ? 1.1 : 0.9;
+        zoom = Math.max(0.1, Math.min(5.0, zoom * zoomFactor));
+
+        panX = event.getX() - (mouseImageX * zoom);
+        panY = event.getY() - (mouseImageY * zoom);
+
+        lastZoom = zoom;
+
+        updateMouseCoordinates(event.getX(), event.getY());
+        redraw();
+        event.consume();
     }
 
-    private void draw() {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+    private void handleMouseMoved(MouseEvent event){
+        updateMouseCoordinates(event.getX(), event.getY());
+    }
 
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    private void handleMouseExited(MouseEvent event) {
+        mouseCoord.set(null);  // Сбрасываем координаты
+    }
 
-        if (currentImage != null) {
-            gc.save();
-            gc.translate(panX, panY);
-            gc.scale(zoom, zoom);
-            gc.drawImage(currentImage, 0, 0);
-            gc.restore();
+    private void updateMouseCoordinates(double screenX, double screenY) {
+        if (currentImage == null) {
+            mouseCoord.set(null);
+            return;
         }
 
-        // Рисуем все нарисованные прямоугольники
-        gc.setStroke(Color.BLUE);
-        gc.setLineWidth(2);
-        for (Rectangle rect : rectangles) {
-            double x = rect.getX1() * zoom + panX;
-            double y = rect.getY1() * zoom + panY;
-            double width = rect.getWidth() * zoom;
-            double height = rect.getHeight() * zoom;
-            gc.strokeRect(x, y, width, height);
+        double currentZoom = zoom;
+
+        // Координаты в системе изображения
+        double imageX = (screenX - panX) / currentZoom;
+        double imageY = (screenY - panY) / currentZoom;
+
+        // Проверяем, находится ли курсор внутри изображения
+        if (imageX >= 0 && imageX <= currentImage.getWidth() &&
+                imageY >= 0 && imageY <= currentImage.getHeight()) {
+            mouseCoord.set(new double[]{imageX, imageY, screenX, screenY});
+        } else {
+            mouseCoord.set(null);
+        }
+    }
+
+    private void deleteRectangleAt(double x, double y) {
+        for (int i = rectangles.size() - 1; i >= 0; i--) {
+            Rectangle rectangle = rectangles.get(i);
+            double screenX1 = rectangle.getX1() * zoom + panX;
+            double screenY1 = rectangle.getY1() * zoom + panY;
+            double screenX2 = rectangle.getX2() * zoom + panX;
+            double screenY2 = rectangle.getY2() * zoom + panY;
+
+            if (x >= screenX1 && x <= screenX2 && y >= screenY1 && y <= screenY2) {
+                rectangles.remove(i);
+                marksCount.set(rectangles.size());
+                redraw();
+                return;
+            }
+        }
+    }
+
+    private void redraw() {
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        gc.setFill(Color.web("#f5f5f5"));
+        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        gc.setTransform(1, 0, 0, 1, 0, 0);
+
+        if (currentImage != null) {
+            double scaledWidth = currentImage.getWidth() * zoom;
+            double scaledHeight = currentImage.getHeight() * zoom;
+            gc.drawImage(currentImage, panX, panY, scaledWidth, scaledHeight);
+        }
+
+        gc.setStroke(Color.web("#ff0000"));
+        gc.setLineWidth(2.0);
+        for (Rectangle rectangle : rectangles) {
+            drawRectangle(gc, rectangle);
         }
 
         if (currentRectangle != null) {
-            gc.setStroke(Color.RED);
-            gc.setLineWidth(1);
-            gc.setLineDashes(5);
-
-            double x = currentRectangle.getX1() * zoom + panX;
-            double y = currentRectangle.getY1() * zoom + panY;
-            double width = currentRectangle.getWidth() * zoom;
-            double height = currentRectangle.getHeight() * zoom;
-            gc.strokeRect(x, y, width, height);
-
-            gc.setLineDashes(0); // Убираем пунктир
+            gc.setStroke(Color.web("#ff6600"));
+            gc.setLineWidth(2.0);
+            gc.setLineDashes(5.0);
+            drawRectangle(gc, currentRectangle);
+            gc.setLineDashes(0);
         }
     }
 
-    public void loadImage(Image image) {
-        this.currentImage = image;
-        rectangles.clear();
-        marksCount.set(0);
-        zoom = 1.0;
-        panX = 0;
-        panY = 0;
-        draw();
+    private void drawRectangle(GraphicsContext gc, Rectangle rectangle) {
+        double screenX1 = rectangle.getX1() * zoom + panX;
+        double screenY1 = rectangle.getY1() * zoom + panY;
+        double screenX2 = rectangle.getX2() * zoom + panX;
+        double screenY2 = rectangle.getY2() * zoom + panY;
+
+        double width = screenX2 - screenX1;
+        double height = screenY2 - screenY1;
+
+        // Для pixel-perfect рисования
+        double x = snapX(screenX1);
+        double y = snapY(screenY1);
+
+        gc.strokeRect(x, y, width, height);
     }
 
-    public void clearMarks() {
+    private double snapX(double x) {
+        return ((int) x) + 0.5;
+    }
+
+    private double snapY(double y) {
+        return ((int) y) + 0.5;
+    }
+
+    @Override
+    protected void layoutChildren() {
+        super.layoutChildren();
+        Bounds bounds = getLayoutBounds();
+        canvas.setWidth(bounds.getWidth());
+        canvas.setHeight(bounds.getHeight());
+        redraw();
+    }
+
+    public double getZoom() {
+        return zoom;
+    }
+
+    public double getPanX() {
+        return panX;
+    }
+
+
+
+    public double getPanY() {
+        return panY;
+    }
+
+    public void setZoom(double zoom){
+        this.zoom = zoom;
+        redraw();
+    }
+
+    public ObjectProperty<double[]> mouseCoordProperty() {
+        return mouseCoord;
+    }
+
+    public void clearMarks(){
         rectangles.clear();
+        currentRectangle = null;
         marksCount.set(0);
-        draw();
+        redraw();
     }
 
     public List<Rectangle> getRectangles() {
         return new ArrayList<>(rectangles);
     }
 
-    public IntegerProperty getMarksCount() {
+    public void setRectangles(List<Rectangle> rectangles){
+        this.rectangles = new ArrayList<>(rectangles);
+        marksCount.set(rectangles.size());
+        redraw();
+    }
+
+    public IntegerProperty getMarksCount(){
         return marksCount;
     }
 }

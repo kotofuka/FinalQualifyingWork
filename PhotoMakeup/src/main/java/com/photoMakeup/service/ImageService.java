@@ -14,9 +14,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-// TODO нужно переделать этот файл
 public class ImageService {
     private static final Logger logger = LoggerFactory.getLogger(ImageService.class);
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -35,7 +36,7 @@ public class ImageService {
         if (selectedFile != null) {
             try {
                 Image fxImage = new Image(selectedFile.toURI().toString());
-                canvasPanel.loadImage(fxImage);
+                canvasPanel.setImage(fxImage);
                 logger.info("Изображение загружено: {}", selectedFile.getAbsolutePath());
             } catch (Exception e) {
                 logger.error("Ошибка при загрузке изображения", e);
@@ -56,12 +57,7 @@ public class ImageService {
 
         if (selectedFile != null) {
             try {
-                List<Rectangle> rectangles = canvasPanel.getRectangles();
-                String json = gson.toJson(rectangles);
-
-                try (FileWriter writer = new FileWriter(selectedFile)) {
-                    writer.write(json);
-                }
+                saveMarks(canvasPanel.getRectangles(), selectedFile);
                 logger.info("Разметка сохранена: {}", selectedFile.getAbsolutePath());
             } catch (IOException e) {
                 logger.error("Ошибка при сохранении разметки", e);
@@ -81,13 +77,56 @@ public class ImageService {
 
         if (selectedFile != null) {
             try {
-                try (FileReader reader = new FileReader(selectedFile)) {
-                    Rectangle[] rectanglesArray = gson.fromJson(reader, Rectangle[].class);
-                    logger.info("Разметка загружена: {} прямоугольников", rectanglesArray.length);
-                }
+                List<Rectangle> rectangles = loadMarks(selectedFile);
+                canvasPanel.setRectangles(rectangles);
+                logger.info("Разметка успешно загружена: {}", selectedFile.getAbsolutePath());
             } catch (IOException e) {
                 logger.error("Ошибка при загрузке разметки", e);
             }
         }
+    }
+
+    private void saveMarks(List<Rectangle> rectangles, File file) throws IOException {
+        List<Map<String, Object>> data = new ArrayList<>();
+
+        for (Rectangle rectangle : rectangles) {
+            Map<String, Object> rectangleMap = Map.of(
+                    "point1", Map.of("x", rectangle.getX1(), "y", rectangle.getY1()),
+                    "point2", Map.of("x", rectangle.getX2(), "y", rectangle.getY2())
+            );
+            data.add(rectangleMap);
+        }
+        Map<String, Object> result = Map.of(
+                "marks", data,
+                "count", rectangles.size()
+        );
+
+        try (FileWriter writer = new FileWriter(file)) {
+            gson.toJson(result, writer);
+        }
+    }
+
+    private List<Rectangle> loadMarks(File file) throws IOException {
+        List<Rectangle> rectangles = new ArrayList<>();
+
+        try (FileReader reader = new FileReader(file)) {
+            Map<String, Object> data = gson.fromJson(reader, Map.class);
+            List<Map<String, Object>> marks = (List<Map<String, Object>>) data.get("marks");
+
+            if (marks != null) {
+                for (Map<String, Object> mark : marks) {
+                    Map<String, Number> point1 = (Map<String, Number>) mark.get("point1");
+                    Map<String, Number> point2 = (Map<String, Number>) mark.get("point2");
+
+                    double x1 = point1.get("x").doubleValue();
+                    double y1 = point1.get("y").doubleValue();
+                    double x2 = point2.get("x").doubleValue();
+                    double y2 = point2.get("y").doubleValue();
+
+                    rectangles.add(new Rectangle(x1, y1, x2, y2));
+                }
+            }
+        }
+        return rectangles;
     }
 }
