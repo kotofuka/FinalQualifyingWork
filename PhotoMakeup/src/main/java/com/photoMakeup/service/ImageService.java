@@ -48,7 +48,7 @@ public class ImageService {
         }
     }
 
-    public void saveNormalizedImage(Mat normalizedImage) {
+    public void saveImage(Mat normalizedImage) {
         javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
         fileChooser.setTitle("Сохранить нормализованное изображение");
         fileChooser.getExtensionFilters().addAll(

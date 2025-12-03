@@ -40,7 +40,7 @@ public class CanvasPanel extends StackPane {
     private double lastZoom = 1.0;
 
     public CanvasPanel() {
-        canvas = new Canvas(800, 600);
+        canvas = new Canvas(900, 600);
         this.getChildren().add(canvas);
 
         setupMouseHandlers();

@@ -34,9 +34,9 @@ public class PhotoMakeupApp extends Application {
     private CanvasPanel canvasPanel;
     private Label statusLabel;
     private BorderPane root;
-    private VBox rightPanel;
-    private TabPane tabPane;
-    private ImageView resultImageView;
+    private VBox statisticPanel;
+    private TabPane tabRightPane;
+    private ImageView currentImage;
     private Label cornersCountLabel;
     private ProgressIndicator progressIndicator;
 
@@ -64,9 +64,11 @@ public class PhotoMakeupApp extends Application {
         root.setStyle("-fx-padding: 0;");
 
         root.setTop(createToolbar());
-        root.setCenter(createTabs());
-        root.setRight(createRightPanel());
+        root.setCenter(canvasPanel);
+        root.setRight(createRightTabs());
         root.setBottom(createStatusBar());
+        
+        initializeCurrentImage();
 
         Scene scene = new Scene(root, 1600, 900);
         stage.setTitle("PhotoMakeup - Разметка и нормализация фотографий");
@@ -90,21 +92,25 @@ public class PhotoMakeupApp extends Application {
         toolbar.setPadding(new Insets(10));
         toolbar.setStyle("-fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;");
 
-        Button openButton = new Button("📁 Открыть фото");
-        openButton.setStyle("-fx-font-size: 12; -fx-padding: 8;");
-        openButton.setOnAction(e -> handlerOpenImage());
+        Button openImageButton = new Button("📁 Открыть фото");
+        openImageButton.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        openImageButton.setOnAction(e -> handlerOpenImage());
 
-        Button clearButton = new Button("❌ Очистить разметку");
-        clearButton.setStyle("-fx-font-size: 12; -fx-padding: 8;");
-        clearButton.setOnAction(e -> {
+        Button saveImageButton = new Button("💾 Сохранить фотогрфию");
+        saveImageButton.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        saveImageButton.setOnAction(e -> handleSaveImage());
+
+        Button clearMakeupButton = new Button("❌ Очистить разметку");
+        clearMakeupButton.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        clearMakeupButton.setOnAction(e -> {
             canvasPanel.clearMarks();
             statusLabel.setText("Разметка очищена");
         });
 
         // ===== БЛОК 2: Сохранение/загрузка разметки =====
-        Button saveButton = new Button("💾 Сохранить JSON");
-        saveButton.setStyle("-fx-font-size: 12; -fx-padding: 8;");
-        saveButton.setOnAction(e -> handleSaveMakeup());
+        Button saveMakeupButton = new Button("💾 Сохранить JSON");
+        saveMakeupButton.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        saveMakeupButton.setOnAction(e -> handleSaveMakeup());
 
         Button loadButton = new Button("📂 Загрузить JSON");
         loadButton.setStyle("-fx-font-size: 12; -fx-padding: 8;");
@@ -120,9 +126,9 @@ public class PhotoMakeupApp extends Application {
         normalizeButton.setOnAction(e -> handleNormalize());
 
         toolbar.getChildren().addAll(
-                openButton, clearButton,
+                openImageButton, saveImageButton, clearMakeupButton,
                 new Separator(),
-                saveButton, loadButton,
+                saveMakeupButton, loadButton,
                 new Separator(),
                 detectButton, normalizeButton
         );
@@ -130,48 +136,30 @@ public class PhotoMakeupApp extends Application {
         return toolbar;
     }
 
-    private TabPane createTabs() {
-        tabPane = new TabPane();
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+    private TabPane createRightTabs() {
+        tabRightPane = new TabPane();
+        tabRightPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         // ===== TAB 1: Разметка =====
-        Tab markupTab = new Tab("📝 Разметка", canvasPanel);
-        markupTab.setClosable(false);
+        statisticPanel = createRightPanel();
+        Tab statisticTab = new Tab("Статистика", statisticPanel);
+        statisticTab.setClosable(false);
 
         // ===== TAB 2: Нормализация =====
-        VBox normalizationPanel = createNormalizationPanel();
-        Tab normalizeTab = new Tab("✨ Нормализация", normalizationPanel);
+        VBox methodsPanel = createMethodsPanel();
+        Tab normalizeTab = new Tab("Методы", methodsPanel);
         normalizeTab.setClosable(false);
 
-        tabPane.getTabs().addAll(markupTab, normalizeTab);
-        return tabPane;
+        tabRightPane.getTabs().addAll(statisticTab, normalizeTab);
+        return tabRightPane;
     }
 
-    private VBox createNormalizationPanel() {
-        VBox panel = new VBox(10);
-        panel.setPadding(new Insets(10));
+    private void initializeCurrentImage() {
 
-        resultImageView = new ImageView();
-        resultImageView.setFitWidth(900);
-        resultImageView.setFitHeight(600);
-        resultImageView.setPreserveRatio(true);
-
-        ScrollPane scrollPane = new ScrollPane(resultImageView);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-
-        Button saveResultButton = new Button("💾 Сохранить результат");
-        saveResultButton.setStyle("-fx-font-size: 12; -fx-padding: 8;");
-        saveResultButton.setOnAction(e -> handleSaveNormalized());
-
-        HBox btnBox = new HBox(10);
-        btnBox.getChildren().addAll(saveResultButton);
-        btnBox.setPadding(new Insets(10));
-
-        panel.getChildren().addAll(btnBox, scrollPane);
-        VBox.setVgrow(scrollPane, Priority.ALWAYS);
-
-        return panel;
+        currentImage = new ImageView();
+        currentImage.setFitWidth(900);
+        currentImage.setFitHeight(600);
+        currentImage.setPreserveRatio(true);
     }
 
     private VBox createRightPanel() {
@@ -265,6 +253,10 @@ public class PhotoMakeupApp extends Application {
         return panel;
     }
 
+    private VBox createMethodsPanel(){
+        return new VBox(5);
+    }
+
     private HBox createStatusBar() {
         HBox statusBar = new HBox();
         statusLabel = new Label("✅ Готово");
@@ -300,7 +292,7 @@ public class PhotoMakeupApp extends Application {
             }
 
             // Переходим на первую вкладку (Разметка)
-            tabPane.getSelectionModel().select(0);
+//            tabPane.getSelectionModel().select(0);
 
         } catch (Exception e) {
             logger.error("❌ Ошибка при открытии изображения", e);
@@ -412,13 +404,14 @@ public class PhotoMakeupApp extends Application {
                     progressIndicator.setVisible(false);
 
                     if (resultImage != null) {
-                        resultImageView.setImage(resultImage);
+                        currentImage.setImage(resultImage);
+                        canvasPanel.setImage(resultImage);
                         statusLabel.setText("✅ Документ нормализован!");
                         logger.info("Документ успешно нормализован. Размер: {} x {}",
                                 (int)resultImage.getWidth(), (int)resultImage.getHeight());
 
                         // Переходим на вкладку с результатом
-                        tabPane.getSelectionModel().select(1);
+//                        tabPane.getSelectionModel().select(1);
                     } else {
                         statusLabel.setText("❌ Ошибка при конвертировании результата");
                     }
@@ -433,15 +426,15 @@ public class PhotoMakeupApp extends Application {
         });
     }
 
-    private void handleSaveNormalized() {
+    private void handleSaveImage() {
         logger.info(">>> Нажата кнопка 'Сохранить результат'");
 
-        if (normalizedImage == null || normalizedImage.empty()) {
+        if (currentMatImage == null || currentMatImage.empty()) {
             statusLabel.setText("❌ Нет результата для сохранения!");
             logger.warn("Попытка сохранить без результата нормализации");
             return;
         }
-        imageService.saveNormalizedImage(normalizedImage);
+        imageService.saveImage(currentMatImage);
     }
 
     private Mat convertImageToMat(Image fxImage) {
