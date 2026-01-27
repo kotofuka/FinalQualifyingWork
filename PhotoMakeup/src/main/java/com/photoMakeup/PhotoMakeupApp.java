@@ -1,13 +1,12 @@
 package com.photoMakeup;
 
+import com.photoMakeup.service.FileInteractionService;
 import com.photoMakeup.ui.CanvasPanel;
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -19,11 +18,12 @@ public class PhotoMakeupApp extends Application {
     private BorderPane root;
     private Scene scene;
 
+    // Service экземпляры
+    private FileInteractionService fileInteractionService;
+
     // UI компоненты
     private Label fileNameLabel;
-
     private CanvasPanel canvasPanel;
-
     private TabPane rightTabPane;
     private VBox statisticsPanel;
 
@@ -39,6 +39,7 @@ public class PhotoMakeupApp extends Application {
         canvasPanel = new CanvasPanel();
 
         // services initialization
+        fileInteractionService = new FileInteractionService();
 
         // additional component initialization
         root.setTop(createToolbar());
@@ -80,7 +81,7 @@ public class PhotoMakeupApp extends Application {
 
         fileMenuButton.getItems().addAll(openFileItem, savePhotoItem, loadMarksItem, saveMarksItem);
         // обработка действий для кнопок в меню "Файл"
-        openFileItem.setOnAction(e -> System.out.println("Открыть файл"));
+        openFileItem.setOnAction(e -> handlerOpenFile());
         savePhotoItem.setOnAction(e -> System.out.println("Сохранить фотографию"));
         loadMarksItem.setOnAction(e -> System.out.println("Загрузить разметку"));
         saveMarksItem.setOnAction(e -> System.out.println("Сохранить разметку"));
@@ -112,6 +113,15 @@ public class PhotoMakeupApp extends Application {
                                     toolMenuButton);
 
         return toolbar;
+    }
+
+    private void handlerOpenFile() {
+        try{
+            fileInteractionService.openImageDialog(canvasPanel);
+
+        } catch (Exception e){
+
+        }
     }
 
     // StatusBar at the bottom of the window
