@@ -4,7 +4,6 @@ import com.photoMakeup.model.CanvasViewModel;
 import com.photoMakeup.model.CustomRectangle;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class CanvasRenderingService {

@@ -117,6 +117,7 @@ public class CanvasViewModel {
     public void clearRectangles() {
         rectangles.clear();
         currentRectangle = null;
+        marksCountProperty().set(0);
         zoom = 1.0;
         panX = 0;
         panY = 0;

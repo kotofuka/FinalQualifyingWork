@@ -48,4 +48,21 @@ public class CanvasPanel extends StackPane {
         viewModel.setCurrentImage(image);
         renderingService.render();
     }
+
+    public Canvas getCanvas() {
+        return canvas;
+    }
+
+    public CanvasViewModel getViewModel(){
+        return viewModel;
+    }
+
+    public void redraw(){
+        renderingService.render();
+    }
+
+    public void clearMarks(){
+        viewModel.clearRectangles();
+        renderingService.render();
+    }
 }

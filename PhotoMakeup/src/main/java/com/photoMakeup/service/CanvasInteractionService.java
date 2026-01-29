@@ -43,7 +43,6 @@ public class CanvasInteractionService {
         if (event.isControlDown() || event.getButton() == MouseButton.MIDDLE){
             // перемещаемся по картинке
             viewModel.setPanning(true);
-            System.out.println("Start panStart:" + viewModel.getPanStartX() + " | " + viewModel.getPanStartY() );
             viewModel.setPanStart(event.getX(), event.getY());
         } else if (event.getButton() == MouseButton.PRIMARY){
             // Начало рисования прямоугольника (метки)
@@ -98,7 +97,6 @@ public class CanvasInteractionService {
         updateMouseCoordinates(event.getX(), event.getY());
         var currentRectangle = viewModel.getCurrentRectangle();
         if (viewModel.isPanning()){
-            System.out.println("finish panStart:" + viewModel.getPanStartX() + " | " + viewModel.getPanStartY() );
             viewModel.setPanning(false);
         } else if (event.getButton() == MouseButton.PRIMARY && currentRectangle != null){
             if (currentRectangle.getWidth() > 5 && currentRectangle.getHeight() > 5){
@@ -108,7 +106,6 @@ public class CanvasInteractionService {
             }
             viewModel.setCurrentRectangle(null);
             renderingService.render();
-            System.out.println("rectangles size: " + viewModel.getRectangles().size());
         }
     }
 

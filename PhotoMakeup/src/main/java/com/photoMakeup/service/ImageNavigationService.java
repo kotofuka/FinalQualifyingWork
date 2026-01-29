@@ -1,4 +1,0 @@
-package com.photoMakeup.service;
-
-public class ImageNavigationService {
-}

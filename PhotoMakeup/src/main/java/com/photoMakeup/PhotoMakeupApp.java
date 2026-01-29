@@ -81,10 +81,10 @@ public class PhotoMakeupApp extends Application {
 
         fileMenuButton.getItems().addAll(openFileItem, savePhotoItem, loadMarksItem, saveMarksItem);
         // обработка действий для кнопок в меню "Файл"
-        openFileItem.setOnAction(e -> handlerOpenFile());
-        savePhotoItem.setOnAction(e -> System.out.println("Сохранить фотографию"));
-        loadMarksItem.setOnAction(e -> System.out.println("Загрузить разметку"));
-        saveMarksItem.setOnAction(e -> System.out.println("Сохранить разметку"));
+        openFileItem.setOnAction(e -> fileInteractionService.openLoadImageDialog(canvasPanel));
+        savePhotoItem.setOnAction(e -> fileInteractionService.openSaveImageDialog(canvasPanel));
+        loadMarksItem.setOnAction(e -> fileInteractionService.openLoadMarksDialog(canvasPanel));
+        saveMarksItem.setOnAction(e -> fileInteractionService.openSaveMarksDialog(canvasPanel));
 
         // кнопка Redo
         Button redoButton = new Button("Отменить");
@@ -100,7 +100,7 @@ public class PhotoMakeupApp extends Application {
         MenuItem findCornersItem = new MenuItem("Обраружить углы");
         MenuItem normalizeItem = new MenuItem("Нормализовать");
 
-        clearMarksItem.setOnAction(e -> System.out.println("Очистить разметку"));
+        clearMarksItem.setOnAction(e -> canvasPanel.clearMarks());
         findCornersItem.setOnAction(e -> System.out.println("Обраружить углы"));
         normalizeItem.setOnAction(e -> System.out.println("Нормализовать"));
 
@@ -115,19 +115,11 @@ public class PhotoMakeupApp extends Application {
         return toolbar;
     }
 
-    private void handlerOpenFile() {
-        try{
-            fileInteractionService.openImageDialog(canvasPanel);
-
-        } catch (Exception e){
-
-        }
-    }
-
     // StatusBar at the bottom of the window
     private HBox createStatusBar() {
         HBox statusBar = new HBox();
         fileNameLabel = new Label("Нет открытого файла");
+        fileInteractionService.setFileNameLabel(fileNameLabel);
         fileNameLabel.setPadding(new Insets(5));
         fileNameLabel.setStyle("-fx-font-size: 11;");
         statusBar.setStyle("-fx-background-color: #e0e0e0; -fx-border-width: 1 0 0 0;");
@@ -159,7 +151,47 @@ public class PhotoMakeupApp extends Application {
     }
 
     private VBox createStatisticsPanel() {
-        return new VBox();
+        VBox panel = new VBox(5);
+        panel.setPadding(new Insets(15));
+        panel.setStyle("-fx-border-color: #e0e0e0; -fx-border-width: 0 0 0 1;");
+
+        // Координаты курсора
+        Label cursorLabel = new Label("📍 Координаты курсора:");
+        cursorLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 12;");
+
+        VBox coordBox = new VBox(5);
+        coordBox.setStyle("-fx-font-size: 11; -fx-border-width: 1; -fx-padding: 10; -fx-border-color: #d0d0d0;");
+
+        Label coordXLabel = new Label("X: —");
+        coordXLabel.setStyle("-fx-font-size: 11; -fx-font-family: monospace;");
+        Label coordYLabel = new Label("Y: —");
+        coordYLabel.setStyle("-fx-font-size: 11; -fx-font-family: monospace;");
+        Label screenCoordLabel = new Label("Экран (px): —");
+        screenCoordLabel.setStyle("-fx-font-size: 10; -fx-text-fill: #888; -fx-font-family: monospace;");
+
+        coordBox.getChildren().addAll(coordXLabel, coordYLabel, new Separator(), screenCoordLabel);
+
+        // слушатель на изменение позиции мышки
+        canvasPanel.setOnMouseMoved(e -> {
+            var viewModel = canvasPanel.getViewModel();
+            double imageX = (e.getX() - viewModel.getPanX()) / viewModel.getZoom();
+            double imageY = (e.getY() - viewModel.getPanY()) / viewModel.getZoom();
+            coordXLabel.setText(String.format("X: %.1f px", imageX));
+            coordYLabel.setText(String.format("Y: %.1f px", imageY));
+            screenCoordLabel.setText(String.format("Экран: (%.0f, %.0f)", e.getX(), e.getY()));
+        });
+
+        Label rectangleCountLabel = new Label("Прямоугольников: 0");
+        rectangleCountLabel.setStyle("-fx-font-size: 11;");
+
+        // Обновление счётчика разметок
+        canvasPanel.getViewModel().marksCountProperty().addListener((observable, oldValue, newValue) -> {
+            rectangleCountLabel.setText("Прямоугольников: " + newValue);
+        });
+
+        panel.getChildren().addAll(cursorLabel, coordBox, new Separator(), rectangleCountLabel);
+
+        return panel;
     }
 
     private VBox createNormalizePanel() {
