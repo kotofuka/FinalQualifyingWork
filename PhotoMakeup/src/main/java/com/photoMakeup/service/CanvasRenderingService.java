@@ -33,8 +33,10 @@ public class CanvasRenderingService {
 
         gc.setStroke(Color.web("#ff0000"));
         gc.setLineWidth(2.0);
-        for(CustomRectangle rectangle: viewModel.getRectangles()){
-            drawRectangle(gc, rectangle);
+        if (viewModel.isShowRectangles()) {
+            for (CustomRectangle rectangle : viewModel.getRectangles()) {
+                drawRectangle(gc, rectangle);
+            }
         }
 
         var currentRectangle = viewModel.getCurrentRectangle();

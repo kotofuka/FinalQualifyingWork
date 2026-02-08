@@ -23,7 +23,6 @@ public class CanvasPanel extends StackPane {
     public CanvasPanel() {
         viewModel = new CanvasViewModel();
 
-        System.out.println("creating CanvasPanel: " + viewModel);
         canvas = new Canvas(900, 600);
         gc = canvas.getGraphicsContext2D();
         getChildren().add(canvas);
@@ -45,7 +44,16 @@ public class CanvasPanel extends StackPane {
     }
 
     public void setCurrentImage(Image image) {
-        viewModel.setCurrentImage(image);
+        setCurrentImage(image, false);
+    }
+
+    public void setCurrentImage(Image image, boolean isNewFile) {
+        viewModel.setCurrentImage(image, isNewFile);
+        renderingService.render();
+    }
+
+    public void setShowRectangle(boolean isShow) {
+        viewModel.setShowRectangles(isShow);
         renderingService.render();
     }
 

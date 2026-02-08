@@ -14,6 +14,7 @@ public class CanvasViewModel {
     private double zoom = 1.0;
     private double panX = 0, panY = 0;
 
+    private boolean isShowRectangles = true;
     private List<CustomRectangle> rectangles = new ArrayList<>();
     private CustomRectangle currentRectangle;
     private double startX, startY;
@@ -27,9 +28,14 @@ public class CanvasViewModel {
     public CanvasViewModel() {}
 
     public Image getCurrentImage() {return currentImage;}
-    public void setCurrentImage(Image currentImage) {
+
+    public void setCurrentImage(Image currentImage){
+        setCurrentImage(currentImage, false);
+    }
+
+    public void setCurrentImage(Image currentImage, boolean isNewFile) {
         this.currentImage = currentImage;
-        this.clearRectangles();
+        if (isNewFile) this.clearRectangles();
     }
 
     public double getCurrentImageWidth() {return currentImage != null? currentImage.getWidth(): 0;}
@@ -38,7 +44,12 @@ public class CanvasViewModel {
     public double getZoom() {return zoom;}
     public void setZoom(double zoom) {
         this.zoom = zoom;
-        // доделать
+    }
+
+    public boolean isShowRectangles() {return isShowRectangles;}
+
+    public void setShowRectangles(boolean isShowRectangles) {
+        this.isShowRectangles = isShowRectangles;
     }
 
     public double getPanX() {
@@ -92,6 +103,7 @@ public class CanvasViewModel {
 
     public void setRectangles(List<CustomRectangle> rectangles) {
         this.rectangles = new ArrayList<>(rectangles);
+        isShowRectangles = true;
         marksCount.set(rectangles.size());
     }
 
@@ -116,6 +128,7 @@ public class CanvasViewModel {
 
     public void clearRectangles() {
         rectangles.clear();
+        isShowRectangles = true;
         currentRectangle = null;
         marksCountProperty().set(0);
         zoom = 1.0;

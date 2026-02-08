@@ -23,12 +23,17 @@ public class FileInteractionService implements FileFormatter {
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private File file;
     private Label fileNameLabel;
+    private final CanvasPanel canvasPanel;
+
+    public FileInteractionService(CanvasPanel canvasPanel) {
+        this.canvasPanel = canvasPanel;
+    }
 
     public void setFileNameLabel(Label fileNameLabel) {
         this.fileNameLabel = fileNameLabel;
     }
 
-    public void openLoadImageDialog(CanvasPanel canvasPanel) {
+    public void openLoadImageDialog() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Выберете файл с изображнием");
         fileChooser.getExtensionFilters().addAll(
@@ -43,7 +48,7 @@ public class FileInteractionService implements FileFormatter {
             try {
                 file = selectedFile;
                 Image fxImage = new Image(file.toURI().toString());
-                canvasPanel.setCurrentImage(fxImage);
+                canvasPanel.setCurrentImage(fxImage, true);
                 canvasPanel.redraw();
                 fileNameLabel.setText(selectedFile.getAbsolutePath());
             } catch (Exception e) {
@@ -52,12 +57,9 @@ public class FileInteractionService implements FileFormatter {
         }
     }
 
-    public void openSaveImageDialog(CanvasPanel canvasPanel) {
-        WritableImage wr = new WritableImage((int) canvasPanel.getViewModel().getCurrentImageWidth(),
-                (int) canvasPanel.getViewModel().getCurrentImageHeight());
-        canvasPanel.getCanvas().snapshot(null, wr);
+    public void openSaveImageDialog() {
 
-        BufferedImage image = fromFXImage(wr, null);
+        BufferedImage image = fromFXImage(canvasPanel.getViewModel().getCurrentImage(), null);
 
         javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
         fileChooser.setTitle("Сохранить измененное изображение");
@@ -79,7 +81,7 @@ public class FileInteractionService implements FileFormatter {
         }
     }
 
-    public void openSaveMarksDialog(CanvasPanel canvasPanel) {
+    public void openSaveMarksDialog() {
         if (canvasPanel.getViewModel().marksCountProperty().get() > 0){
             System.out.println("⚠\uFE0F  Нет разметок для сохранения!");
         }
@@ -102,7 +104,7 @@ public class FileInteractionService implements FileFormatter {
         }
     }
 
-    public void openLoadMarksDialog(CanvasPanel canvasPanel) {
+    public void openLoadMarksDialog() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Загрузить разметку");
         fileChooser.getExtensionFilters().add(

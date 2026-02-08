@@ -89,6 +89,7 @@ public class CanvasInteractionService {
             double endY = (event.getY() - viewModel.getPanY()) / viewModel.getZoom();
 
             viewModel.setCurrentRectangle(new CustomRectangle(viewModel.getStartX(), viewModel.getStartY(), endX, endY));
+
             renderingService.render();
         }
     }
