@@ -1,5 +1,6 @@
 package com.photoMakeup.service;
 
+import ch.qos.logback.core.encoder.JsonEscapeUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.photoMakeup.model.Rectangle;
@@ -76,6 +77,7 @@ public class ImageService {
                 } else {
                     success = Imgcodecs.imwrite(fileName + ".png", normalizedImage);
                 }
+
             } catch (Exception e) {
                 logger.error("Ошибка при сохранении нормализованного изображения", e);
             }

@@ -434,7 +434,7 @@ public class PhotoMakeupApp extends Application {
             logger.warn("Попытка сохранить без результата нормализации");
             return;
         }
-        imageService.saveImage(currentMatImage);
+        imageService.saveImage(convertImageToMat(currentImage.getImage()));
     }
 
     private Mat convertImageToMat(Image fxImage) {

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.photoMakeup</groupId>
+    <artifactId>photo-makeup-normalizer</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>PhotoMakeup - Разметка и нормализация фотографий</name>
+    <description>Приложение для разметки и нормализации фотографий документов</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <javafx.version>21</javafx.version>
+        <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
+        <opencv.library.path>A:/files/codingPrograms/opencv/opencv/build/java/x64</opencv.library.path>
+        <opencv.version>4.12.0</opencv.version>
+    </properties>
+
+    <!-- ========== РЕПОЗИТОРИИ ========== -->
+    <repositories>
+        <!-- Maven Central -->
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+
+        <!-- OpenCV Repository -->
+        <repository>
+            <id>opencv-releases</id>
+            <url>https://raw.githubusercontent.com/opencv/opencv/master/modules/java/jar</url>
+        </repository>
+
+        <!-- JCenter (для альтернативных пакетов) -->
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com</url>
+        </repository>
+    </repositories>
+
+    <!-- ========== ЗАВИСИМОСТИ ========== -->
+    <dependencies>
+        <!-- ===== JavaFX ===== -->
+        <!-- JavaFX Controls для UI компонентов -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <!-- JavaFX FXML для описания UI -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <!-- JavaFX Graphics для 2D рисования -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <!-- JavaFX Swing для интеграции с AWT/Swing -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <!-- OpenCV -->
+        <dependency>
+            <groupId>org.opencv</groupId>
+            <artifactId>opencv-java</artifactId>
+            <version>${opencv.version}</version>
+            <scope>system</scope>
+            <systemPath>A:/files/codingPrograms/opencv/opencv/build/java/opencv-4120.jar</systemPath>
+
+        </dependency>
+
+        <!-- ===== JSON ===== -->
+        <!-- GSON для сохранения/загрузки разметки в JSON -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
+        <!-- ===== Логирование ===== -->
+        <!-- SLF4J API (интерфейс для логирования) -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+
+        <!-- Logback Classic (реализация SLF4J) -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.11</version>
+        </dependency>
+
+        <!-- Logback Core (основной модуль Logback) -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.4.11</version>
+        </dependency>
+    </dependencies>
+
+    <!-- ========== СБОРКА ========== -->
+    <build>
+        <plugins>
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <!-- JavaFX Maven Plugin (для запуска JavaFX приложений) -->
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <configuration>
+                    <mainClass>com.photoMakeup.PhotoMakeupApp</mainClass>
+                    <!-- ✅ ВАЖНО: Передаём путь к OpenCV при запуске -->
+                    <options>
+                        <option>-Djava.library.path=${opencv.library.path}</option>
+                        <!-- Дополнительные опции для Java 21 -->
+                        <option>--enable-native-access=ALL-UNNAMED</option>
+                    </options>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Shade Plugin (для создания uber JAR) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.photoMakeup.PhotoMakeupApp</mainClass>
+                                </transformer>
+                            </transformers>
+                            <finalName>photo-makeup-${project.version}</finalName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Maven Resources Plugin (для копирования ресурсов) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Surefire Plugin (для запуска тестов) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                    <argLine>-Djava.library.path=${opencv.library.path}</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

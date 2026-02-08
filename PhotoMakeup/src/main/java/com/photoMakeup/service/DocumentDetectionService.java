@@ -58,7 +58,7 @@ public class DocumentDetectionService {
             double area = Imgproc.contourArea(contour);
 
             // Фильтруем по размеру (чёрные точки должны быть меньше, чем белые)
-            if (area < 300 || area > 5000) continue;
+            if (area < 30 || area > 5000) continue;
 
             // Вычисляем компактность (blob-подобные формы)
             double perimeter = Imgproc.arcLength(

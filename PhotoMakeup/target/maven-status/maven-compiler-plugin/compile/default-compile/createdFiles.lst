@@ -1,0 +1,5 @@
+com\photoMakeup\service\ImageService.class
+com\photoMakeup\model\Rectangle.class
+com\photoMakeup\service\DocumentDetectionService.class
+com\photoMakeup\service\PerspectiveTransformService$1.class
+com\photoMakeup\service\PerspectiveTransformService.class
