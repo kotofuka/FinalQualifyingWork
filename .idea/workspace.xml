@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3513eb49-e547-40f6-806e-cdc5daa46f7c" name="Changes" comment="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons">
+      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/BinarizationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/ConverterImp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/GrayScaleImp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/MethodOtsuImp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/NiblackMethodImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/PhotoMakeupApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/PhotoMakeupApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/model/CanvasViewModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/model/CanvasViewModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/model/CustomRectangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/model/CustomRectangle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/CanvasInteractionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/CanvasInteractionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/CanvasRenderingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/CanvasRenderingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/FileInteractionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/FileInteractionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/ui/CanvasPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/ui/CanvasPanel.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaFXApplication" />
+        <option value="Enum" />
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--follow-tags" />
+        <option name="title" value="Current Branch" />
+      </GitPushTagMode>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="PhotoMakeup_v3" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="35qhVaqdyjlM6ft4scxKgH6iIus" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Application.CircleDetectorByContours.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PhotoMakeupApp.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.photo-makeup-normalizer [org.openjfx:javafx-maven-plugin:0.0.8:run].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;A:/files/codingProjects/JavaProjects/FinalQualifyingWork/PhotoMakeup/src/main/resources&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;File.Encoding&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\resources" />
+      <recent name="A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.PhotoMakeupApp">
+    <configuration name="CircleDetectorByContours" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.photoMakeup.CircleDetectorByContours" />
+      <module name="photo-makeup-normalizer" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.photoMakeup.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PhotoMakeupApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.photoMakeup.PhotoMakeupApp" />
+      <module name="photo-makeup-normalizer" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.PhotoMakeupApp" />
+        <item itemvalue="Application.CircleDetectorByContours" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.17011.79" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.17011.79" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3513eb49-e547-40f6-806e-cdc5daa46f7c" name="Changes" comment="" />
+      <created>1763843534066</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1763843534066</updated>
+      <workItem from="1763843535676" duration="970000" />
+      <workItem from="1763844659252" duration="6224000" />
+      <workItem from="1763886379109" duration="30079000" />
+      <workItem from="1763924878768" duration="1431000" />
+      <workItem from="1764084023899" duration="2477000" />
+      <workItem from="1764175138366" duration="16000" />
+      <workItem from="1764790046268" duration="4162000" />
+      <workItem from="1764920658957" duration="654000" />
+      <workItem from="1768663407955" duration="24000" />
+      <workItem from="1768904713423" duration="2418000" />
+      <workItem from="1768993040851" duration="2912000" />
+      <workItem from="1769027803761" duration="1670000" />
+      <workItem from="1769074903478" duration="4537000" />
+      <workItem from="1769095401627" duration="367000" />
+      <workItem from="1769095778467" duration="9244000" />
+      <workItem from="1769115365203" duration="382000" />
+      <workItem from="1769339619388" duration="2472000" />
+      <workItem from="1769431869696" duration="7877000" />
+      <workItem from="1769510674722" duration="4394000" />
+      <workItem from="1769635315953" duration="2229000" />
+      <workItem from="1769684085955" duration="2786000" />
+      <workItem from="1769769665696" duration="3823000" />
+      <workItem from="1769889171554" duration="7355000" />
+      <workItem from="1769955921135" duration="4768000" />
+      <workItem from="1770491383841" duration="9266000" />
+    </task>
+    <task id="LOCAL-00001" summary="define models and start modeling service layer">
+      <option name="closed" value="true" />
+      <created>1763850868893</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1763850868893</updated>
+    </task>
+    <task id="LOCAL-00002" summary="complete PhotoMakeupApp_v2">
+      <option name="closed" value="true" />
+      <created>1763922590763</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1763922590763</updated>
+    </task>
+    <task id="LOCAL-00003" summary="add correct auto new file name;&#10;add icon for app">
+      <option name="closed" value="true" />
+      <created>1763924231750</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1763924231750</updated>
+    </task>
+    <task id="LOCAL-00004" summary="start to review code of main class; redesigned app view">
+      <option name="closed" value="true" />
+      <created>1764796644770</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1764796644770</updated>
+    </task>
+    <task id="LOCAL-00005" summary="rewriting the application version 3;&#10;External component proposed (i.e. UI defined); &#10;implemented classes: CanvasPanel, Corner, CornerPoint, CustomRectangle.">
+      <option name="closed" value="true" />
+      <created>1769115710308</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1769115710308</updated>
+    </task>
+    <task id="LOCAL-00006" summary="refactor(CanvasPanel): split monolithic class into multiple components&#10;&#10;- Extracted CanvasRenderer for rendering logic&#10;- Created CanvasState for state management&#10;- Separated CanvasEvents for event handling&#10;- Updated all dependencies to use new structure">
+      <option name="closed" value="true" />
+      <created>1769513584090</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1769513584090</updated>
+    </task>
+    <task id="LOCAL-00007" summary="The entire code has been cleaned of unnecessary comments.">
+      <option name="closed" value="true" />
+      <created>1769513843520</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1769513843520</updated>
+    </task>
+    <task id="LOCAL-00008" summary="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons">
+      <option name="closed" value="true" />
+      <created>1769686860855</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1769686860855</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/PhotoMakeup_v2" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="define models and start modeling service layer" />
+    <MESSAGE value="complete PhotoMakeupApp_v2" />
+    <MESSAGE value="add correct auto new file name;&#10;add icon for app" />
+    <MESSAGE value="start to review code of main class; redesigned app view" />
+    <MESSAGE value="rewriting the application version 3;&#10;External component proposed (i.e. UI defined); &#10;implemented classes: CanvasPanel, Corner, CornerPoint, CustomRectangle." />
+    <MESSAGE value="refactor(CanvasPanel): split monolithic class into multiple components&#10;&#10;- Extracted CanvasRenderer for rendering logic&#10;- Created CanvasState for state management&#10;- Separated CanvasEvents for event handling&#10;- Updated all dependencies to use new structure" />
+    <MESSAGE value="The entire code has been cleaned of unnecessary comments." />
+    <MESSAGE value="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons" />
+    <option name="LAST_COMMIT_MESSAGE" value="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons" />
+  </component>
+</project>
