@@ -2,6 +2,10 @@ package com.photoMakeup;
 
 import com.photoMakeup.service.BinarizationService;
 import com.photoMakeup.service.FileInteractionService;
+import com.photoMakeup.service.utils.GrayScaleProcessor;
+import com.photoMakeup.service.utils.MethodOtsuProcessor;
+import com.photoMakeup.service.utils.NiblackMethodProcessor;
+import com.photoMakeup.service.utils.SauvolaMethodProcessor;
 import com.photoMakeup.ui.CanvasPanel;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -44,7 +48,7 @@ public class PhotoMakeupApp extends Application {
 
         // services initialization
         fileInteractionService = new FileInteractionService(canvasPanel);
-        binarizationService = new BinarizationService();
+        binarizationService = new BinarizationService(canvasPanel);
 
         // additional component initialization
         root.setTop(createToolbar());
@@ -214,16 +218,25 @@ public class PhotoMakeupApp extends Application {
         panel.setStyle("-fx-border-color: #e0e0e0; -fx-border-width: 0 0 0 1;");
 
         Button grayScaleButton = new Button("Gray Scale");
-        grayScaleButton.setOnAction(e -> binarizationService.grayScale(canvasPanel));
+        grayScaleButton.setOnAction(e -> binarizationService.doAction(new GrayScaleProcessor()));
 
         Button otsuButton = new Button("Otsu method");
-        otsuButton.setOnAction(e -> binarizationService.methodOtsu(canvasPanel));
+        otsuButton.setOnAction(e -> binarizationService.doAction(new MethodOtsuProcessor()));
 
         Button niblackButton = new Button("Niblack method");
-        niblackButton.setOnAction(e -> binarizationService.niblackMethod(canvasPanel));
+        Label kSpinnerLabel = new Label("Значение k");
+        Spinner<Double> kSpinner = new Spinner<>();
+        kSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-1.0, 0.0, -0.2, 0.01));
+        Label windowSizeSpinnerLabel = new Label("Размер скользящего окна");
+        Spinner<Integer> windowSizeSpinner = new Spinner<>();
+        windowSizeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(3, 101,15, 2));
+        niblackButton.setOnAction(e -> binarizationService.doAction(new NiblackMethodProcessor(
+                kSpinner.getValue(),
+                windowSizeSpinner.getValue())
+        ));
 
         Button sauvolaButton = new Button("Sauvola method");
-        sauvolaButton.setOnAction(e -> System.out.println("Sauvola method"));
+        sauvolaButton.setOnAction(e -> binarizationService.doAction(new SauvolaMethodProcessor(0, 128, 100)));
 
         Button kMeansButton = new Button("K-Means method");
         kMeansButton.setOnAction(e -> System.out.println("K-Means method"));
@@ -233,7 +246,17 @@ public class PhotoMakeupApp extends Application {
 
         panel.getChildren().addAll(grayScaleButton,
                                     new Separator(),
-                                    otsuButton, niblackButton, sauvolaButton, kMeansButton, gatosThresholdingButton);
+                                    otsuButton,
+                                    new Separator(),
+                                    new HBox(5, kSpinnerLabel, kSpinner),
+                                    new HBox(5, windowSizeSpinnerLabel, windowSizeSpinner),
+                                    niblackButton,
+                                    new Separator(),
+                                    sauvolaButton,
+                                    new Separator(),
+                                    kMeansButton,
+                                    new Separator(),
+                                    gatosThresholdingButton);
 
         return panel;
     }

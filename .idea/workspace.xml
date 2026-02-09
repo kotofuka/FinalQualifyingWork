@@ -5,18 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3513eb49-e547-40f6-806e-cdc5daa46f7c" name="Changes" comment="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons">
-      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/BinarizationService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/ConverterImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/GrayScaleImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/MethodOtsuImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/NiblackMethodImp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/GrayScaleProcessor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/RectangleProcessor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/SauvolaMethodProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/PhotoMakeupApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/PhotoMakeupApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/model/CanvasViewModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/model/CanvasViewModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/model/CustomRectangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/model/CustomRectangle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/CanvasInteractionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/CanvasInteractionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/CanvasRenderingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/CanvasRenderingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/FileInteractionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/FileInteractionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/ui/CanvasPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/ui/CanvasPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/BinarizationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/BinarizationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/GrayScaleImp.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/MethodOtsuImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/MethodOtsuProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/NiblackMethodImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/NiblackMethodProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,8 +27,8 @@
       <list>
         <option value="JavaFXApplication" />
         <option value="Enum" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -159,6 +158,8 @@
       <workItem from="1769889171554" duration="7355000" />
       <workItem from="1769955921135" duration="4768000" />
       <workItem from="1770491383841" duration="9266000" />
+      <workItem from="1770644172118" duration="5570000" />
+      <workItem from="1770659807053" duration="2326000" />
     </task>
     <task id="LOCAL-00001" summary="define models and start modeling service layer">
       <option name="closed" value="true" />
@@ -263,6 +264,7 @@
     <MESSAGE value="refactor(CanvasPanel): split monolithic class into multiple components&#10;&#10;- Extracted CanvasRenderer for rendering logic&#10;- Created CanvasState for state management&#10;- Separated CanvasEvents for event handling&#10;- Updated all dependencies to use new structure" />
     <MESSAGE value="The entire code has been cleaned of unnecessary comments." />
     <MESSAGE value="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons" />
-    <option name="LAST_COMMIT_MESSAGE" value="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons" />
+    <MESSAGE value="updated constants for detecting control points on questionnaires" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated constants for detecting control points on questionnaires" />
   </component>
 </project>
