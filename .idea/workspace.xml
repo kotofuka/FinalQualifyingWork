@@ -4,18 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3513eb49-e547-40f6-806e-cdc5daa46f7c" name="Changes" comment="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons">
-      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/GrayScaleProcessor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/RectangleProcessor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/SauvolaMethodProcessor.java" afterDir="false" />
+    <list default="true" id="3513eb49-e547-40f6-806e-cdc5daa46f7c" name="Changes" comment="implemented methods:&#10;- Otsu&#10;- Niblack&#10;- Sauvola&#10;&#10;Also, the graphical, supporting the functionality of methods was modified (buttons and fields were added)">
+      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/MethodKMeansProcessor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/PhotoMakeupApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/PhotoMakeupApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/BinarizationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/BinarizationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/GrayScaleImp.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/MethodOtsuImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/MethodOtsuProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/NiblackMethodImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/NiblackMethodProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +151,8 @@
       <workItem from="1769955921135" duration="4768000" />
       <workItem from="1770491383841" duration="9266000" />
       <workItem from="1770644172118" duration="5570000" />
-      <workItem from="1770659807053" duration="2326000" />
+      <workItem from="1770659807053" duration="2579000" />
+      <workItem from="1770738969708" duration="4764000" />
     </task>
     <task id="LOCAL-00001" summary="define models and start modeling service layer">
       <option name="closed" value="true" />
@@ -225,7 +218,15 @@
       <option name="project" value="LOCAL" />
       <updated>1769686860855</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="implemented methods:&#10;- Otsu&#10;- Niblack&#10;- Sauvola&#10;&#10;Also, the graphical, supporting the functionality of methods was modified (buttons and fields were added)">
+      <option name="closed" value="true" />
+      <created>1770674476380</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1770674476380</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -265,6 +266,7 @@
     <MESSAGE value="The entire code has been cleaned of unnecessary comments." />
     <MESSAGE value="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons" />
     <MESSAGE value="updated constants for detecting control points on questionnaires" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated constants for detecting control points on questionnaires" />
+    <MESSAGE value="implemented methods:&#10;- Otsu&#10;- Niblack&#10;- Sauvola&#10;&#10;Also, the graphical, supporting the functionality of methods was modified (buttons and fields were added)" />
+    <option name="LAST_COMMIT_MESSAGE" value="implemented methods:&#10;- Otsu&#10;- Niblack&#10;- Sauvola&#10;&#10;Also, the graphical, supporting the functionality of methods was modified (buttons and fields were added)" />
   </component>
 </project>

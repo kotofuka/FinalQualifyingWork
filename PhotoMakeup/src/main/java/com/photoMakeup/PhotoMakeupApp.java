@@ -2,10 +2,7 @@ package com.photoMakeup;
 
 import com.photoMakeup.service.BinarizationService;
 import com.photoMakeup.service.FileInteractionService;
-import com.photoMakeup.service.utils.GrayScaleProcessor;
-import com.photoMakeup.service.utils.MethodOtsuProcessor;
-import com.photoMakeup.service.utils.NiblackMethodProcessor;
-import com.photoMakeup.service.utils.SauvolaMethodProcessor;
+import com.photoMakeup.service.utils.*;
 import com.photoMakeup.ui.CanvasPanel;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -225,21 +222,41 @@ public class PhotoMakeupApp extends Application {
 
         Button niblackButton = new Button("Niblack method");
         Label kSpinnerLabel = new Label("Значение k");
-        Spinner<Double> kSpinner = new Spinner<>();
-        kSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-1.0, 0.0, -0.2, 0.01));
+        Spinner<Double> kNiblackSpinner = new Spinner<>();
+        kNiblackSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-1.0, 0.0, -0.2, 0.01));
         Label windowSizeSpinnerLabel = new Label("Размер скользящего окна");
-        Spinner<Integer> windowSizeSpinner = new Spinner<>();
-        windowSizeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(3, 101,15, 2));
+        Spinner<Integer> windowSizeNiblackSpinner = new Spinner<>();
+        windowSizeNiblackSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(3, 101,15, 2));
         niblackButton.setOnAction(e -> binarizationService.doAction(new NiblackMethodProcessor(
-                kSpinner.getValue(),
-                windowSizeSpinner.getValue())
+                kNiblackSpinner.getValue(),
+                windowSizeNiblackSpinner.getValue())
         ));
 
         Button sauvolaButton = new Button("Sauvola method");
-        sauvolaButton.setOnAction(e -> binarizationService.doAction(new SauvolaMethodProcessor(0, 128, 100)));
+        Spinner<Double> kSauvolaSpinner = new Spinner<>();
+        kSauvolaSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-1.0, 0.0, -0.2, 0.01));
+        Label rSauvolaSpinnerLabel = new Label("Значение параметра R:");
+        Spinner<Integer> rSauvolaSpinner = new Spinner<>();
+        rSauvolaSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 256,128, 2));
+        Spinner<Integer> windowSizeSauvolaSpinner = new Spinner<>();
+        windowSizeSauvolaSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(3, 101,15, 2));
+        sauvolaButton.setOnAction(e -> binarizationService.doAction(new SauvolaMethodProcessor(
+                kSauvolaSpinner.getValue(),
+                rSauvolaSpinner.getValue(),
+                windowSizeSauvolaSpinner.getValue()
+        )));
 
         Button kMeansButton = new Button("K-Means method");
-        kMeansButton.setOnAction(e -> System.out.println("K-Means method"));
+        Label attemptsLabel = new Label("Количество попыток для улучшения результата:");
+        Spinner<Integer> attemptsSpinner = new Spinner<>();
+        attemptsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20,3, 1));
+        Label maxIterationsLabel = new Label("Максимальное число итераций:");
+        Spinner<Integer> maxIterationsSpinner = new Spinner<>();
+        maxIterationsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 500,100, 10));
+        kMeansButton.setOnAction(e -> binarizationService.doAction(new MethodKMeansProcessor(
+                attemptsSpinner.getValue(),
+                maxIterationsSpinner.getValue()
+        )));
 
         Button gatosThresholdingButton = new Button("Gatos Thresholding method");
         gatosThresholdingButton.setOnAction(e -> System.out.println("Gatos Thresholding method"));
@@ -248,12 +265,17 @@ public class PhotoMakeupApp extends Application {
                                     new Separator(),
                                     otsuButton,
                                     new Separator(),
-                                    new HBox(5, kSpinnerLabel, kSpinner),
-                                    new HBox(5, windowSizeSpinnerLabel, windowSizeSpinner),
+                                    new HBox(5, kSpinnerLabel, kNiblackSpinner),
+                                    new HBox(5, windowSizeSpinnerLabel, windowSizeNiblackSpinner),
                                     niblackButton,
                                     new Separator(),
+                                    new HBox(5, kSpinnerLabel, kSauvolaSpinner),
+                                    new HBox(5, rSauvolaSpinnerLabel, rSauvolaSpinner),
+                                    new HBox(5, windowSizeSpinnerLabel, windowSizeSauvolaSpinner),
                                     sauvolaButton,
                                     new Separator(),
+                                    new HBox(5, attemptsLabel, attemptsSpinner),
+                                    new HBox(5, maxIterationsLabel, maxIterationsSpinner),
                                     kMeansButton,
                                     new Separator(),
                                     gatosThresholdingButton);
