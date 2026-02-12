@@ -2,13 +2,16 @@ com\photoMakeup\model\CanvasViewModel.class
 com\photoMakeup\model\CustomRectangle.class
 com\photoMakeup\model\Corner.class
 com\photoMakeup\service\utils\FileFormatter.class
+com\photoMakeup\service\utils\ExpandToSquareProcessor.class
 com\photoMakeup\model\SharedModel.class
 com\photoMakeup\service\utils\GrayScaleProcessor.class
 com\photoMakeup\service\ImageAnnotationService.class
+com\photoMakeup\service\utils\MethodKMeansProcessor.class
 com\photoMakeup\ui\CanvasPanel.class
 com\photoMakeup\service\utils\ConverterImp.class
 com\photoMakeup\service\utils\NiblackMethodProcessor.class
 com\photoMakeup\service\CanvasInteractionService.class
+com\photoMakeup\service\NormalizeMarksupService.class
 com\photoMakeup\service\utils\SauvolaMethodProcessor.class
 com\photoMakeup\service\utils\RectangleProcessor.class
 com\photoMakeup\service\utils\MethodOtsuProcessor.class

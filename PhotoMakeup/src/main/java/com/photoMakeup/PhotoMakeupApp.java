@@ -2,6 +2,7 @@ package com.photoMakeup;
 
 import com.photoMakeup.service.BinarizationService;
 import com.photoMakeup.service.FileInteractionService;
+import com.photoMakeup.service.NormalizeMarksupService;
 import com.photoMakeup.service.utils.*;
 import com.photoMakeup.ui.CanvasPanel;
 import javafx.application.Application;
@@ -24,6 +25,7 @@ public class PhotoMakeupApp extends Application {
     // Service экземпляры
     private FileInteractionService fileInteractionService;
     private BinarizationService binarizationService;
+    private NormalizeMarksupService normalizeService;
 
     // UI компоненты
     private Label fileNameLabel;
@@ -46,6 +48,7 @@ public class PhotoMakeupApp extends Application {
         // services initialization
         fileInteractionService = new FileInteractionService(canvasPanel);
         binarizationService = new BinarizationService(canvasPanel);
+        normalizeService = new NormalizeMarksupService(canvasPanel);
 
         // additional component initialization
         root.setTop(createToolbar());
@@ -106,22 +109,33 @@ public class PhotoMakeupApp extends Application {
         CheckMenuItem showMarksBox = new CheckMenuItem("Показать разметку");
         showMarksBox.setSelected(true);
 
+        MenuItem adjustMarksItem = new MenuItem("Подогнать разметку");
 
         MenuItem findCornersItem = new MenuItem("Обраружить углы");
         MenuItem normalizeItem = new MenuItem("Нормализовать");
 
         clearMarksItem.setOnAction(e -> canvasPanel.clearMarks());
         showMarksBox.setOnAction(e -> canvasPanel.setShowRectangle(showMarksBox.isSelected()));
+        adjustMarksItem.setOnAction(e -> normalizeService.doActionWithRectangle(new ExpandToSquareProcessor()));
         findCornersItem.setOnAction(e -> System.out.println("Обраружить углы"));
         normalizeItem.setOnAction(e -> System.out.println("Нормализовать"));
 
-        toolMenuButton.getItems().addAll(clearMarksItem, showMarksBox, findCornersItem, normalizeItem);
+        toolMenuButton.getItems().addAll(
+                clearMarksItem,
+                showMarksBox,
+                adjustMarksItem,
+                new SeparatorMenuItem(),
+                findCornersItem,
+                normalizeItem
+        );
 
-        toolbar.getChildren().addAll(fileMenuButton,
-                                    new Separator(),
-                                    redoButton,
-                                    new Separator(),
-                                    toolMenuButton);
+        toolbar.getChildren().addAll(
+                fileMenuButton,
+                new Separator(),
+                redoButton,
+                new Separator(),
+                toolMenuButton
+        );
 
         return toolbar;
     }
@@ -258,9 +272,6 @@ public class PhotoMakeupApp extends Application {
                 maxIterationsSpinner.getValue()
         )));
 
-        Button gatosThresholdingButton = new Button("Gatos Thresholding method");
-        gatosThresholdingButton.setOnAction(e -> System.out.println("Gatos Thresholding method"));
-
         panel.getChildren().addAll(grayScaleButton,
                                     new Separator(),
                                     otsuButton,
@@ -276,9 +287,8 @@ public class PhotoMakeupApp extends Application {
                                     new Separator(),
                                     new HBox(5, attemptsLabel, attemptsSpinner),
                                     new HBox(5, maxIterationsLabel, maxIterationsSpinner),
-                                    kMeansButton,
-                                    new Separator(),
-                                    gatosThresholdingButton);
+                                    kMeansButton
+        );
 
         return panel;
     }

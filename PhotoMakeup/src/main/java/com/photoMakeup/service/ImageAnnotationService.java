@@ -2,10 +2,14 @@ package com.photoMakeup.service;
 
 import com.photoMakeup.model.CanvasViewModel;
 import com.photoMakeup.model.CustomRectangle;
+import com.photoMakeup.service.utils.ConverterImp;
+import org.opencv.core.Mat;
+import org.opencv.core.Rect;
 
+import java.util.List;
 import java.util.ListIterator;
 
-public class ImageAnnotationService {
+public class ImageAnnotationService implements ConverterImp {
     private final CanvasViewModel viewModel;
 
     private final CanvasRenderingService renderingService;

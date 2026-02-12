@@ -1,3 +1,4 @@
+A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\service\NormalizeMarksupService.java
 A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\service\utils\GrayScaleProcessor.java
 A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\model\CanvasViewModel.java
 A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\service\utils\RectangleProcessor.java
@@ -11,9 +12,11 @@ A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\ja
 A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\service\utils\MethodOtsuProcessor.java
 A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\service\CanvasRenderingService.java
 A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\ui\CanvasPanel.java
+A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\service\utils\ExpandToSquareProcessor.java
 A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\service\utils\NiblackMethodProcessor.java
 A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\PhotoMakeupApp.java
 A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\service\FileInteractionService.java
+A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\service\utils\MethodKMeansProcessor.java
 A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\model\SharedModel.java
 A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\service\CanvasInteractionService.java
 A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup\src\main\java\com\photoMakeup\model\CornerPoint.java
