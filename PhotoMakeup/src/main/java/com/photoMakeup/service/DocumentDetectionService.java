@@ -3,8 +3,10 @@ package com.photoMakeup.service;
 
 import com.photoMakeup.model.Corner;
 import com.photoMakeup.model.CornerPoint;
+import com.photoMakeup.ui.CanvasPanel;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.CLAHE;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 import org.slf4j.Logger;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.opencv.imgproc.Imgproc.createCLAHE;
+
 // todo
 public class DocumentDetectionService {
     private static Logger logger = LoggerFactory.getLogger(DocumentDetectionService.class);
@@ -22,74 +26,81 @@ public class DocumentDetectionService {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
-    public List<CornerPoint> detectDocumentCorners(Mat currentMatImage) {
-        logger.info("========== ПОИСК 4 ЧЁРНЫХ ТОЧЕК НА ЛИСТЕ ==========");
+    public List<CornerPoint> detectDocumentCorners(Mat currentMatImage, List<Point> points) {
+//        logger.info("========== ПОИСК 4 ЧЁРНЫХ ТОЧЕК НА ЛИСТЕ ==========");
+//
+//        Mat originalImage = currentMatImage.clone();
+//        int width = originalImage.width();
+//        int height = originalImage.height();
+//
+//        logger.info("Размер изображения: {} x {}", width, height);
+//
+//        List<Point> foundPoints = new ArrayList<>();
+//
+//        Mat grayImg = new Mat();
+//        Imgproc.cvtColor(originalImage, grayImg, Imgproc.COLOR_BGR2GRAY);
+//
+//        // Размытие для шумоподавления
+//        Imgproc.GaussianBlur(grayImg, grayImg, new Size(5, 5), 0);
+//
+//        // ИНВЕРТИРОВАННАЯ бинаризация (чёрные точки станут белыми)
+//        Mat binaryImg = new Mat();
+//
+//        Imgproc.threshold(grayImg, binaryImg, 0, 255,
+//                Imgproc.THRESH_OTSU | Imgproc.THRESH_BINARY_INV);
+//
+//        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE,
+//                new Size(3, 3));
+//        Imgproc.morphologyEx(binaryImg, binaryImg, Imgproc.MORPH_OPEN, kernel);
+//
+//        List<MatOfPoint> contours = new ArrayList<>();
+//        Mat hierarchy = new Mat();
+//        Imgproc.findContours(binaryImg, contours, hierarchy,
+//                Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+//
+//        // СОБИРАЕМ ВСЕ НАЙДЕННЫЕ ТОЧКИ
+//        for (MatOfPoint contour : contours) {
+//            double area = Imgproc.contourArea(contour);
+//
+//            // Фильтруем по размеру (чёрные точки должны быть меньше, чем белые)
+//            if (area < 30 || area > 5000) continue;
+//
+//            // Вычисляем компактность (blob-подобные формы)
+//            double perimeter = Imgproc.arcLength(
+//                    new MatOfPoint2f(contour.toArray()), true);
+//            double circularity = 4 * Math.PI * area / (perimeter * perimeter);
+//
+//            // Округлые чёрные области (компактность > 0.7)
+//            if (circularity > 0.7) {
+//                Moments moments = Imgproc.moments(contour);
+//
+//                if (moments.m00 > 0) {
+//                    int cx = (int) (moments.m10 / moments.m00);
+//                    int cy = (int) (moments.m01 / moments.m00);
+//
+//                    foundPoints.add(new Point(cx, cy));
+//                    logger.info("Найдена чёрная точка: (" + cx + ", " + cy +
+//                            "), компактность=" + String.format("%.2f", circularity) +
+//                            ", площадь=" + (int)area);
+//                }
+//            }
+//        }
+//
+//        logger.info("Всего найдено точек: {}", foundPoints.size());
+
 
         Mat originalImage = currentMatImage.clone();
         int width = originalImage.width();
         int height = originalImage.height();
 
-        logger.info("Размер изображения: {} x {}", width, height);
 
-        List<Point> foundPoints = new ArrayList<>();
+        List<CornerPoint> cornerPoints = findCornerPoints(points, width, height);
 
-        Mat grayImg = new Mat();
-        Imgproc.cvtColor(originalImage, grayImg, Imgproc.COLOR_BGR2GRAY);
-
-        // Размытие для шумоподавления
-        Imgproc.GaussianBlur(grayImg, grayImg, new Size(5, 5), 0);
-
-        // ИНВЕРТИРОВАННАЯ бинаризация (чёрные точки станут белыми)
-        Mat binaryImg = new Mat();
-        Imgproc.threshold(grayImg, binaryImg, 0, 255,
-                Imgproc.THRESH_OTSU | Imgproc.THRESH_BINARY_INV);
-
-        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE,
-                new Size(3, 3));
-        Imgproc.morphologyEx(binaryImg, binaryImg, Imgproc.MORPH_OPEN, kernel);
-
-        List<MatOfPoint> contours = new ArrayList<>();
-        Mat hierarchy = new Mat();
-        Imgproc.findContours(binaryImg, contours, hierarchy,
-                Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
-
-        // СОБИРАЕМ ВСЕ НАЙДЕННЫЕ ТОЧКИ
-        for (MatOfPoint contour : contours) {
-            double area = Imgproc.contourArea(contour);
-
-            // Фильтруем по размеру (чёрные точки должны быть меньше, чем белые)
-            if (area < 30 || area > 5000) continue;
-
-            // Вычисляем компактность (blob-подобные формы)
-            double perimeter = Imgproc.arcLength(
-                    new MatOfPoint2f(contour.toArray()), true);
-            double circularity = 4 * Math.PI * area / (perimeter * perimeter);
-
-            // Округлые чёрные области (компактность > 0.7)
-            if (circularity > 0.7) {
-                Moments moments = Imgproc.moments(contour);
-
-                if (moments.m00 > 0) {
-                    int cx = (int) (moments.m10 / moments.m00);
-                    int cy = (int) (moments.m01 / moments.m00);
-
-                    foundPoints.add(new Point(cx, cy));
-                    logger.info("Найдена чёрная точка: (" + cx + ", " + cy +
-                            "), компактность=" + String.format("%.2f", circularity) +
-                            ", площадь=" + (int)area);
-                }
-            }
-        }
-
-        logger.info("Всего найдено точек: {}", foundPoints.size());
-
-        List<CornerPoint> cornerPoints = findCornerPoints(foundPoints, width, height);
-
-        // Очистка ресурсов
-        grayImg.release();
-        binaryImg.release();
-        kernel.release();
-        hierarchy.release();
+//        // Очистка ресурсов
+//        grayImg.release();
+//        binaryImg.release();
+//        kernel.release();
+//        hierarchy.release();
 
         return cornerPoints;
     }

@@ -338,7 +338,7 @@ public class PhotoMakeupApp extends Application {
         CompletableFuture.runAsync(() -> {
             try {
                 // Вызываем сервис обнаружения
-                detectedCorners = detectionService.detectDocumentCorners(currentMatImage);
+                detectedCorners = detectionService.detectDocumentCorners(currentMatImage, canvasPanel.getPoints());
 
                 // Возвращаемся в поток JavaFX для обновления UI
                 javafx.application.Platform.runLater(() -> {

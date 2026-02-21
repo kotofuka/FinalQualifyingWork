@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2605d2a0-7570-486a-b9b2-3ee679defb02" name="Changes" comment="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons">
-      <change afterPath="$PROJECT_DIR$/PhotoMakeup/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/PhotoMakeupApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/PhotoMakeupApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/DocumentDetectionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/DocumentDetectionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/ImageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/ImageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/ui/CanvasPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/ui/CanvasPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,27 +20,62 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="PhotoMakeup_v2" />
+        <entry key="$PROJECT_DIR$" value="refactor_version" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="39xAtfPt6JolID6CFCszHHVjab4" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.photo-makeup-normalizer [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
-    "node.js.selected.package.tslint": "(autodetect)"
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.photo-makeup-normalizer [org.openjfx:javafx-maven-plugin:0.0.8:run].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="A:\files\codingProjects\JavaProjects\FinalQualifyingWork\PhotoMakeup" />
     </key>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.17011.79" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.17011.79" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2605d2a0-7570-486a-b9b2-3ee679defb02" name="Changes" comment="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons" />
+      <created>1771627566531</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1771627566531</updated>
+      <workItem from="1771627569405" duration="1934000" />
+      <workItem from="1771661562681" duration="7048000" />
+    </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -53,6 +90,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons" />
-    <option name="LAST_COMMIT_MESSAGE" value="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons" />
+    <MESSAGE value="A feature has been added that allows you to expand the selected markup to the outer border" />
+    <option name="LAST_COMMIT_MESSAGE" value="A feature has been added that allows you to expand the selected markup to the outer border" />
   </component>
 </project>

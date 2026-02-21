@@ -1,5 +1,6 @@
 package com.photoMakeup.ui;
 
+import com.photoMakeup.model.Corner;
 import com.photoMakeup.model.Rectangle;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -14,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import org.opencv.core.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,8 @@ public class CanvasPanel extends StackPane {
     private double startX, startY;
 
     private List<Rectangle> rectangles = new ArrayList<>();
+
+    private List<Point> points = new ArrayList<>();
 
     private IntegerProperty marksCount = new SimpleIntegerProperty(0);
 
@@ -50,6 +54,8 @@ public class CanvasPanel extends StackPane {
         redraw();
     }
 
+    public List<Point> getPoints(){ return points;}
+
     public Image getCurrentImage() {
         return currentImage;
     }
@@ -61,6 +67,7 @@ public class CanvasPanel extends StackPane {
         panX = 0;
         panY = 0;
         rectangles.clear();
+        points.clear();
         marksCount.set(0);
         mouseCoord.set(null);
         redraw();
@@ -94,10 +101,14 @@ public class CanvasPanel extends StackPane {
             // Начало рисования прямоугольника
             startX = (event.getX() - panX) / zoom;
             startY = (event.getY() - panY) / zoom;
+
+            points.add(new Point(startX, startY));
         } else if (event.getButton() == MouseButton.SECONDARY) {
             // Удаление прямоугольника
-            deleteRectangleAt(event.getX(), event.getY());
+//            deleteRectangleAt(event.getX(), event.getY());
+            deleteCorner(event.getX(), event.getY());
         }
+        redraw();
     }
 
     private void handleMouseDragged(MouseEvent event) {
@@ -109,18 +120,19 @@ public class CanvasPanel extends StackPane {
             panStartX = event.getX();
             panStartY = event.getY();
             redraw();
-        } else if (event.getButton() == MouseButton.PRIMARY) {
-            double endX = (event.getX() - panX) / zoom;
-            double endY = (event.getY() - panY) / zoom;
-
-            double x1 = Math.min(startX, endX);
-            double y1 = Math.min(startY, endY);
-            double x2 = Math.max(startX, endX);
-            double y2 = Math.max(startY, endY);
-
-            currentRectangle = new Rectangle(x1, y1, x2 , y2);
-            redraw();
         }
+//        else if (event.getButton() == MouseButton.PRIMARY) {
+//            double endX = (event.getX() - panX) / zoom;
+//            double endY = (event.getY() - panY) / zoom;
+//
+//            double x1 = Math.min(startX, endX);
+//            double y1 = Math.min(startY, endY);
+//            double x2 = Math.max(startX, endX);
+//            double y2 = Math.max(startY, endY);
+//
+//            currentRectangle = new Rectangle(x1, y1, x2 , y2);
+//            redraw();
+//        }
     }
 
     private void handleMouseReleased(MouseEvent event) {
@@ -128,12 +140,12 @@ public class CanvasPanel extends StackPane {
 
         if(isPanning){
             isPanning = false;
-        } else if (event.getButton() == MouseButton.PRIMARY && currentRectangle != null) {
-            if (currentRectangle.getWidth() > 5 && currentRectangle.getHeight() > 5) {
-                rectangles.add(currentRectangle);
-                marksCount.set(rectangles.size());
-            }
-            currentRectangle = null;
+        } else if (event.getButton() == MouseButton.PRIMARY) {
+//            if (currentRectangle.getWidth() > 5 && currentRectangle.getHeight() > 5) {
+//                rectangles.add(currentRectangle);
+//                marksCount.set(rectangles.size());
+//            }
+//            currentRectangle = null;
             redraw();
         }
     }
@@ -186,19 +198,27 @@ public class CanvasPanel extends StackPane {
         }
     }
 
-    private void deleteRectangleAt(double x, double y) {
-        for (int i = rectangles.size() - 1; i >= 0; i--) {
-            Rectangle rectangle = rectangles.get(i);
-            double screenX1 = rectangle.getX1() * zoom + panX;
-            double screenY1 = rectangle.getY1() * zoom + panY;
-            double screenX2 = rectangle.getX2() * zoom + panX;
-            double screenY2 = rectangle.getY2() * zoom + panY;
+//    private void deleteRectangleAt(double x, double y) {
+//        for (int i = rectangles.size() - 1; i >= 0; i--) {
+//            Rectangle rectangle = rectangles.get(i);
+//            double screenX1 = rectangle.getX1() * zoom + panX;
+//            double screenY1 = rectangle.getY1() * zoom + panY;
+//            double screenX2 = rectangle.getX2() * zoom + panX;
+//            double screenY2 = rectangle.getY2() * zoom + panY;
+//
+//            if (x >= screenX1 && x <= screenX2 && y >= screenY1 && y <= screenY2) {
+//                rectangles.remove(i);
+//                marksCount.set(rectangles.size());
+//                redraw();
+//                return;
+//            }
+//        }
+//    }
 
-            if (x >= screenX1 && x <= screenX2 && y >= screenY1 && y <= screenY2) {
-                rectangles.remove(i);
-                marksCount.set(rectangles.size());
-                redraw();
-                return;
+    private void deleteCorner(double x, double y) {
+        for (int i = 0; i < points.size(); i++) {
+            if (Math.abs(points.get(i).x - x) <= 20 && Math.abs(points.get(i).y - y) <= 20) {
+                points.remove(i);
             }
         }
     }
@@ -225,6 +245,10 @@ public class CanvasPanel extends StackPane {
             drawRectangle(gc, rectangle);
         }
 
+        for (Point point : points) {
+            drawPoint(gc, point);
+        }
+
         if (currentRectangle != null) {
             gc.setStroke(Color.web("#ff6600"));
             gc.setLineWidth(2.0);
@@ -248,6 +272,16 @@ public class CanvasPanel extends StackPane {
         double y = snapY(screenY1);
 
         gc.strokeRect(x, y, width, height);
+    }
+
+    private void drawPoint(GraphicsContext gc, Point point) {
+        double screenX1 = point.x * zoom + panX;
+        double screenY1 = point.y * zoom + panY;
+
+        double x = snapX(screenX1);
+        double y = snapY(screenY1);
+
+        gc.fillOval(x, y, 8, 8);
     }
 
     private double snapX(double x) {
