@@ -4,13 +4,18 @@ import com.photoMakeup.ui.CanvasPanel;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
-public class NiblackMethodProcessor implements RectangleProcessor {
+public class NiblackMethodProcessor implements RectangleProcessor, ApplyDualThresholdImpl {
     private final double k;
     private final int windowSize;
+    private final int minThreshold;
+    private final int maxThreshold;
 
-    public NiblackMethodProcessor(final double k, final int windowSize) {
+    public NiblackMethodProcessor(double k, int windowSize, int minThreshold, int maxThreshold) {
         this.k = k;
         this.windowSize = (windowSize % 2 == 0) ? windowSize + 1 : windowSize;
+
+        this.minThreshold = Math.max(0, Math.min(minThreshold, 255));
+        this.maxThreshold = Math.max(0, Math.min(maxThreshold, 255));
     }
 
     @Override
@@ -47,9 +52,7 @@ public class NiblackMethodProcessor implements RectangleProcessor {
                         true,
                         Core.BORDER_REPLICATE);
 
-
                 Core.multiply(gray32f, gray32f, graySquared);
-
 
                 Imgproc.boxFilter(graySquared, meanSquared, CvType.CV_32F,
                         new Size(windowSize, windowSize),
@@ -57,22 +60,17 @@ public class NiblackMethodProcessor implements RectangleProcessor {
                         true,
                         Core.BORDER_REPLICATE);
 
-
                 Core.multiply(mean, mean, meanSquaredValue);
-
 
                 Core.subtract(meanSquared, meanSquaredValue, variance);
                 Core.max(variance, new Scalar(0), variance);
 
-
                 Core.sqrt(variance, stddev);
-
 
                 Core.multiply(stddev, new Scalar(k), kStddev);
                 Core.add(mean, kStddev, thresholdMap);
 
-                Core.compare(gray32f, thresholdMap, binary, Core.CMP_GT);
-                binary.convertTo(binary, CvType.CV_8U, 255);
+                binary = applyDualThreshold(gray32f, thresholdMap, minThreshold, maxThreshold);
 
                 if (image.channels() > 1){
                     Mat binaryBgr = new Mat();
@@ -101,4 +99,6 @@ public class NiblackMethodProcessor implements RectangleProcessor {
             binary.release();
         }
     }
+
+
 }

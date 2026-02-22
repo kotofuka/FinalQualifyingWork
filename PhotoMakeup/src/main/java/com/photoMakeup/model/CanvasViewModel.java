@@ -13,6 +13,7 @@ import java.util.List;
 
 public class CanvasViewModel {
     private Image currentImage;
+    private Image originalImage;
     private double zoom = 1.0;
     private double panX = 0, panY = 0;
 
@@ -30,14 +31,23 @@ public class CanvasViewModel {
     public CanvasViewModel() {}
 
     public Image getCurrentImage() {return currentImage;}
+    public Image getOriginalImage() {return originalImage;}
 
     public void setCurrentImage(Image currentImage){
         setCurrentImage(currentImage, false);
     }
 
+    public void setOriginalImage(Image originalImage) {
+        this.originalImage = originalImage;
+    }
+
     public void setCurrentImage(Image currentImage, boolean isNewFile) {
         this.currentImage = currentImage;
-        if (isNewFile) this.clearRectangles();
+
+        if (isNewFile) {
+            this.clearRectangles();
+            this.originalImage = currentImage;
+        }
     }
 
     public double getCurrentImageWidth() {return currentImage != null? currentImage.getWidth(): 0;}
@@ -136,5 +146,18 @@ public class CanvasViewModel {
         zoom = 1.0;
         panX = 0;
         panY = 0;
+    }
+
+    public CanvasViewModel copy(){
+        CanvasViewModel copy = new CanvasViewModel();
+        copy.setCurrentImage(currentImage);
+        copy.setPan(panX, panY);
+        copy.setZoom(zoom);
+        copy.setPanStart(panStartX, panStartY);
+        copy.setCurrentRectangle(currentRectangle);
+        copy.setRectangles(rectangles);
+        copy.setOriginalImage(originalImage);
+        copy.setShowRectangles(isShowRectangles);
+        return copy;
     }
 }

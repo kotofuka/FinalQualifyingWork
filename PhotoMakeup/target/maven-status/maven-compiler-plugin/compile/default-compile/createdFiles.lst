@@ -1,5 +1,6 @@
 com\photoMakeup\model\CanvasViewModel.class
 com\photoMakeup\model\CustomRectangle.class
+com\photoMakeup\service\utils\ApplyDualThresholdImpl.class
 com\photoMakeup\model\Corner.class
 com\photoMakeup\service\utils\FileFormatter.class
 com\photoMakeup\service\utils\ExpandToSquareProcessor.class
@@ -17,5 +18,7 @@ com\photoMakeup\service\utils\RectangleProcessor.class
 com\photoMakeup\service\utils\MethodOtsuProcessor.class
 com\photoMakeup\model\CornerPoint.class
 com\photoMakeup\service\BinarizationService.class
+com\photoMakeup\service\utils\UndoManager.class
 com\photoMakeup\service\CanvasRenderingService.class
 com\photoMakeup\service\FileInteractionService.class
+com\photoMakeup\service\UndoService.class

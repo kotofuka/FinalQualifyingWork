@@ -17,7 +17,7 @@ public class BinarizationService implements ConverterImp {
     }
 
     public void doAction(RectangleProcessor func){
-        Mat image = imageToMat(canvasPanel.getViewModel().getCurrentImage());
+        Mat image = imageToMat(canvasPanel.getViewModel().getOriginalImage());
         if (image.empty()){
             throw new IllegalArgumentException("Image is empty");
         }
@@ -33,5 +33,9 @@ public class BinarizationService implements ConverterImp {
         } finally {
             image.release();
         }
+    }
+
+    public void resetAllActions(){
+        canvasPanel.setCurrentImage(canvasPanel.getViewModel().getOriginalImage());
     }
 }

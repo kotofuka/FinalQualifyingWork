@@ -3,6 +3,7 @@ package com.photoMakeup;
 import com.photoMakeup.service.BinarizationService;
 import com.photoMakeup.service.FileInteractionService;
 import com.photoMakeup.service.NormalizeMarksupService;
+import com.photoMakeup.service.UndoService;
 import com.photoMakeup.service.utils.*;
 import com.photoMakeup.ui.CanvasPanel;
 import javafx.application.Application;
@@ -22,10 +23,14 @@ public class PhotoMakeupApp extends Application {
     private BorderPane root;
     private Scene scene;
 
+    // Константы
+    private final int SIZE_UNDO_SERVICE = 6;
+
     // Service экземпляры
     private FileInteractionService fileInteractionService;
     private BinarizationService binarizationService;
     private NormalizeMarksupService normalizeService;
+//    private UndoService undoService;
 
     // UI компоненты
     private Label fileNameLabel;
@@ -49,6 +54,7 @@ public class PhotoMakeupApp extends Application {
         fileInteractionService = new FileInteractionService(canvasPanel);
         binarizationService = new BinarizationService(canvasPanel);
         normalizeService = new NormalizeMarksupService(canvasPanel);
+//        undoService = new UndoService(SIZE_UNDO_SERVICE, canvasPanel);
 
         // additional component initialization
         root.setTop(createToolbar());
@@ -90,16 +96,17 @@ public class PhotoMakeupApp extends Application {
 
         fileMenuButton.getItems().addAll(openFileItem, savePhotoItem, loadMarksItem, saveMarksItem);
         // обработка действий для кнопок в меню "Файл"
-        openFileItem.setOnAction(e -> fileInteractionService.openLoadImageDialog());
+        openFileItem.setOnAction(e -> {
+            fileInteractionService.openLoadImageDialog();
+//            undoService.clear();
+        });
         savePhotoItem.setOnAction(e -> fileInteractionService.openSaveImageDialog());
         loadMarksItem.setOnAction(e -> fileInteractionService.openLoadMarksDialog());
         saveMarksItem.setOnAction(e -> fileInteractionService.openSaveMarksDialog());
 
         // кнопка Redo
         Button redoButton = new Button("Отменить");
-        redoButton.setOnAction(e -> System.out.println("Отменить"));
-//        KeyCombination redoShortcut = KeyCombination.keyCombination("Ctrl+Z");
-//        redoButton.setTooltip(new Tooltip("Горячая клавиша: " + redoShortcut.getDisplayText()));
+        redoButton.setOnAction(e -> binarizationService.resetAllActions());
 
         // выпадающий список Инструменты
         MenuButton toolMenuButton = new MenuButton("Инструменты");
@@ -235,18 +242,60 @@ public class PhotoMakeupApp extends Application {
         otsuButton.setOnAction(e -> binarizationService.doAction(new MethodOtsuProcessor()));
 
         Button niblackButton = new Button("Niblack method");
-        Label kSpinnerLabel = new Label("Значение k");
+        Label kSpinnerNiblackLabel = new Label("Значение k");
         Spinner<Double> kNiblackSpinner = new Spinner<>();
         kNiblackSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-1.0, 0.0, -0.2, 0.01));
-        Label windowSizeSpinnerLabel = new Label("Размер скользящего окна");
+        Label windowSizeSpinnerNiblackLabel = new Label("Размер скользящего окна");
         Spinner<Integer> windowSizeNiblackSpinner = new Spinner<>();
         windowSizeNiblackSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(3, 101,15, 2));
+        Label minThresholdNiblackLabel = new Label("Значение минимального порога");
+        Spinner<Integer> minThresholdNiblackSpinner = new Spinner<>();
+        minThresholdNiblackSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 255,30, 1));
+        Label maxThresholdNiblackLabel = new Label("Значение максимального порога");
+        Spinner<Integer> maxThresholdNiblackSpinner = new Spinner<>();
+        maxThresholdNiblackSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 255,220, 1));
+        kNiblackSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                binarizationService.doAction(new NiblackMethodProcessor(
+                    kNiblackSpinner.getValue(),
+                    windowSizeNiblackSpinner.getValue(),
+                    minThresholdNiblackSpinner.getValue(),
+                    maxThresholdNiblackSpinner.getValue())
+                )
+        );
+        windowSizeNiblackSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                binarizationService.doAction(new NiblackMethodProcessor(
+                        kNiblackSpinner.getValue(),
+                        windowSizeNiblackSpinner.getValue(),
+                        minThresholdNiblackSpinner.getValue(),
+                        maxThresholdNiblackSpinner.getValue()))
+        );
+
+        minThresholdNiblackSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                binarizationService.doAction(new NiblackMethodProcessor(
+                        kNiblackSpinner.getValue(),
+                        windowSizeNiblackSpinner.getValue(),
+                        minThresholdNiblackSpinner.getValue(),
+                        maxThresholdNiblackSpinner.getValue()))
+        );
+
+        maxThresholdNiblackSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                binarizationService.doAction(new NiblackMethodProcessor(
+                        kNiblackSpinner.getValue(),
+                        windowSizeNiblackSpinner.getValue(),
+                        minThresholdNiblackSpinner.getValue(),
+                        maxThresholdNiblackSpinner.getValue()))
+        );
+
         niblackButton.setOnAction(e -> binarizationService.doAction(new NiblackMethodProcessor(
                 kNiblackSpinner.getValue(),
-                windowSizeNiblackSpinner.getValue())
-        ));
+                windowSizeNiblackSpinner.getValue(),
+                minThresholdNiblackSpinner.getValue(),
+                maxThresholdNiblackSpinner.getValue()))
+        );
 
         Button sauvolaButton = new Button("Sauvola method");
+        Label kSpinnerSauvolaLabel = new Label("Значение k");
+        Label windowSizeSpinnerSauvolaLabel = new Label("Размер скользящего окна");
         Spinner<Double> kSauvolaSpinner = new Spinner<>();
         kSauvolaSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-1.0, 0.0, -0.2, 0.01));
         Label rSauvolaSpinnerLabel = new Label("Значение параметра R:");
@@ -254,10 +303,58 @@ public class PhotoMakeupApp extends Application {
         rSauvolaSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 256,128, 2));
         Spinner<Integer> windowSizeSauvolaSpinner = new Spinner<>();
         windowSizeSauvolaSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(3, 101,15, 2));
+        Label minThresholdSauvolaLabel = new Label("Значение минимального порога");
+        Spinner<Integer> minThresholdSauvolaSpinner = new Spinner<>();
+        minThresholdSauvolaSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 255,30, 1));
+        Label maxThresholdSauvolaLabel = new Label("Значение максимального порога");
+        Spinner<Integer> maxThresholdSauvolaSpinner = new Spinner<>();
+        maxThresholdSauvolaSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 255,220, 1));
+        kSauvolaSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                binarizationService.doAction(new SauvolaMethodProcessor(
+                    kSauvolaSpinner.getValue(),
+                    rSauvolaSpinner.getValue(),
+                    windowSizeSauvolaSpinner.getValue(),
+                    minThresholdSauvolaSpinner.getValue(),
+                    maxThresholdSauvolaSpinner.getValue()
+        )));
+        rSauvolaSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                binarizationService.doAction(new SauvolaMethodProcessor(
+                        kSauvolaSpinner.getValue(),
+                        rSauvolaSpinner.getValue(),
+                        windowSizeSauvolaSpinner.getValue(),
+                        minThresholdSauvolaSpinner.getValue(),
+                        maxThresholdSauvolaSpinner.getValue()
+        )));
+        windowSizeSauvolaSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                binarizationService.doAction(new SauvolaMethodProcessor(
+                        kSauvolaSpinner.getValue(),
+                        rSauvolaSpinner.getValue(),
+                        windowSizeSauvolaSpinner.getValue(),
+                        minThresholdSauvolaSpinner.getValue(),
+                        maxThresholdSauvolaSpinner.getValue()
+        )));
+        minThresholdSauvolaSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                binarizationService.doAction(new SauvolaMethodProcessor(
+                        kSauvolaSpinner.getValue(),
+                        rSauvolaSpinner.getValue(),
+                        windowSizeSauvolaSpinner.getValue(),
+                        minThresholdSauvolaSpinner.getValue(),
+                        maxThresholdSauvolaSpinner.getValue()
+                )));
+        maxThresholdSauvolaSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                binarizationService.doAction(new SauvolaMethodProcessor(
+                        kSauvolaSpinner.getValue(),
+                        rSauvolaSpinner.getValue(),
+                        windowSizeSauvolaSpinner.getValue(),
+                        minThresholdSauvolaSpinner.getValue(),
+                        maxThresholdSauvolaSpinner.getValue()
+                )));
         sauvolaButton.setOnAction(e -> binarizationService.doAction(new SauvolaMethodProcessor(
                 kSauvolaSpinner.getValue(),
                 rSauvolaSpinner.getValue(),
-                windowSizeSauvolaSpinner.getValue()
+                windowSizeSauvolaSpinner.getValue(),
+                minThresholdSauvolaSpinner.getValue(),
+                maxThresholdSauvolaSpinner.getValue()
         )));
 
         Button kMeansButton = new Button("K-Means method");
@@ -267,6 +364,15 @@ public class PhotoMakeupApp extends Application {
         Label maxIterationsLabel = new Label("Максимальное число итераций:");
         Spinner<Integer> maxIterationsSpinner = new Spinner<>();
         maxIterationsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 500,100, 10));
+        attemptsSpinner.valueProperty().addListener((observable, oldValue, newValue) ->
+                binarizationService.doAction(new MethodKMeansProcessor(
+                    attemptsSpinner.getValue(),
+                    maxIterationsSpinner.getValue()
+                )));
+        maxIterationsSpinner.valueProperty().addListener((observable, oldValue, newValue) -> binarizationService.doAction(new MethodKMeansProcessor(
+                        attemptsSpinner.getValue(),
+                        maxIterationsSpinner.getValue()
+        )));
         kMeansButton.setOnAction(e -> binarizationService.doAction(new MethodKMeansProcessor(
                 attemptsSpinner.getValue(),
                 maxIterationsSpinner.getValue()
@@ -276,13 +382,17 @@ public class PhotoMakeupApp extends Application {
                                     new Separator(),
                                     otsuButton,
                                     new Separator(),
-                                    new HBox(5, kSpinnerLabel, kNiblackSpinner),
-                                    new HBox(5, windowSizeSpinnerLabel, windowSizeNiblackSpinner),
+                                    new HBox(5, kSpinnerNiblackLabel, kNiblackSpinner),
+                                    new HBox(5, windowSizeSpinnerNiblackLabel, windowSizeNiblackSpinner),
+                                    new HBox(5, minThresholdNiblackLabel, minThresholdNiblackSpinner),
+                                    new HBox(5, maxThresholdNiblackLabel, maxThresholdNiblackSpinner),
                                     niblackButton,
                                     new Separator(),
-                                    new HBox(5, kSpinnerLabel, kSauvolaSpinner),
+                                    new HBox(5, kSpinnerSauvolaLabel, kSauvolaSpinner),
                                     new HBox(5, rSauvolaSpinnerLabel, rSauvolaSpinner),
-                                    new HBox(5, windowSizeSpinnerLabel, windowSizeSauvolaSpinner),
+                                    new HBox(5, windowSizeSpinnerSauvolaLabel, windowSizeSauvolaSpinner),
+                                    new HBox(5, minThresholdSauvolaLabel, minThresholdSauvolaSpinner),
+                                    new HBox(5, maxThresholdSauvolaLabel, maxThresholdSauvolaSpinner),
                                     sauvolaButton,
                                     new Separator(),
                                     new HBox(5, attemptsLabel, attemptsSpinner),

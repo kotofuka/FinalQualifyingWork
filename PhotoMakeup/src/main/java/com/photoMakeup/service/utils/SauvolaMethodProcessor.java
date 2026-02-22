@@ -3,15 +3,21 @@ package com.photoMakeup.service.utils;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
-public class SauvolaMethodProcessor implements RectangleProcessor{
+public class SauvolaMethodProcessor implements RectangleProcessor, ApplyDualThresholdImpl{
     private final double k;
     private final double R;
     private final int windowSize;
+    private final int minThreshold;
+    private final int maxThreshold;
 
-    public SauvolaMethodProcessor(double k, double R, int windowSize){
+
+    public SauvolaMethodProcessor(double k, double R, int windowSize, int minThreshold, int maxThreshold){
         this.k = k;
         this.R = R;
         this.windowSize = (windowSize % 2 == 0) ? windowSize + 1 : windowSize;
+
+        this.minThreshold = Math.max(0, Math.min(minThreshold, 255));
+        this.maxThreshold = Math.max(0, Math.min(maxThreshold, 255));
     }
 
     @Override
@@ -70,8 +76,8 @@ public class SauvolaMethodProcessor implements RectangleProcessor{
                 Core.add(factor, new Scalar(1.0), factor);
 
                 Core.multiply(mean, factor, thresholdMap);
-                Core.compare(gray32f, thresholdMap, binary, Core.CMP_GT);
-                binary.convertTo(binary, CvType.CV_8U, 255);
+
+                binary = applyDualThreshold(gray32f, thresholdMap, minThreshold, maxThreshold);
 
                 if (image.channels() > 1){
                     Mat binaryBgr = new Mat();
