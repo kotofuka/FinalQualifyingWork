@@ -244,7 +244,7 @@ public class PhotoMakeupApp extends Application {
         Button niblackButton = new Button("Niblack method");
         Label kSpinnerNiblackLabel = new Label("Значение k");
         Spinner<Double> kNiblackSpinner = new Spinner<>();
-        kNiblackSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-1.0, 0.0, -0.2, 0.01));
+        kNiblackSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-1.0, 1.0, -0.2, 0.01));
         Label windowSizeSpinnerNiblackLabel = new Label("Размер скользящего окна");
         Spinner<Integer> windowSizeNiblackSpinner = new Spinner<>();
         windowSizeNiblackSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(3, 101,15, 2));
@@ -297,7 +297,7 @@ public class PhotoMakeupApp extends Application {
         Label kSpinnerSauvolaLabel = new Label("Значение k");
         Label windowSizeSpinnerSauvolaLabel = new Label("Размер скользящего окна");
         Spinner<Double> kSauvolaSpinner = new Spinner<>();
-        kSauvolaSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-1.0, 0.0, -0.2, 0.01));
+        kSauvolaSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(-1.0, 1.0, 0.2, 0.01));
         Label rSauvolaSpinnerLabel = new Label("Значение параметра R:");
         Spinner<Integer> rSauvolaSpinner = new Spinner<>();
         rSauvolaSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 256,128, 2));

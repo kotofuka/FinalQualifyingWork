@@ -5,17 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3513eb49-e547-40f6-806e-cdc5daa46f7c" name="Changes" comment="implemented methods:&#10;- K-means&#10;&#10;Also, the graphical, supporting the functionality of methods was modified (buttons and fields were added)">
-      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/UndoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/ApplyDualThresholdImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/UndoManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/recognized-chars-check/129_normalized_marks.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/recognized-chars-check/ground_truth.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/recognized-chars-check/recognition_script.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/PhotoMakeupApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/PhotoMakeupApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/model/CanvasViewModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/model/CanvasViewModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/BinarizationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/BinarizationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/NiblackMethodProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/NiblackMethodProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/FileInteractionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/FileInteractionService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/SauvolaMethodProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/src/main/java/com/photoMakeup/service/utils/SauvolaMethodProcessor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/PhotoMakeup/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
@@ -172,6 +163,13 @@
       <workItem from="1771760624241" duration="1820000" />
       <workItem from="1771778747066" duration="5629000" />
       <workItem from="1771795153443" duration="653000" />
+      <workItem from="1772186257542" duration="7000" />
+      <workItem from="1772187685402" duration="246000" />
+      <workItem from="1772364305618" duration="2968000" />
+      <workItem from="1773167931311" duration="5000" />
+      <workItem from="1774528156287" duration="2264000" />
+      <workItem from="1774781301158" duration="15000" />
+      <workItem from="1775685610378" duration="800000" />
     </task>
     <task id="LOCAL-00001" summary="define models and start modeling service layer">
       <option name="closed" value="true" />
@@ -291,11 +289,11 @@
     <MESSAGE value="rewriting the application version 3;&#10;External component proposed (i.e. UI defined); &#10;implemented classes: CanvasPanel, Corner, CornerPoint, CustomRectangle." />
     <MESSAGE value="refactor(CanvasPanel): split monolithic class into multiple components&#10;&#10;- Extracted CanvasRenderer for rendering logic&#10;- Created CanvasState for state management&#10;- Separated CanvasEvents for event handling&#10;- Updated all dependencies to use new structure" />
     <MESSAGE value="The entire code has been cleaned of unnecessary comments." />
-    <MESSAGE value="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons" />
     <MESSAGE value="updated constants for detecting control points on questionnaires" />
     <MESSAGE value="implemented methods:&#10;- Otsu&#10;- Niblack&#10;- Sauvola&#10;&#10;Also, the graphical, supporting the functionality of methods was modified (buttons and fields were added)" />
     <MESSAGE value="implemented methods:&#10;- K-means&#10;&#10;Also, the graphical, supporting the functionality of methods was modified (buttons and fields were added)" />
     <MESSAGE value="the functionality has been changed from rectangles to points, which allows you to manually define control points on the original image to normalize it" />
-    <option name="LAST_COMMIT_MESSAGE" value="the functionality has been changed from rectangles to points, which allows you to manually define control points on the original image to normalize it" />
+    <MESSAGE value="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons" />
+    <option name="LAST_COMMIT_MESSAGE" value="implemented and modified the main functionality for managing the application:&#10;- improved photo navigation; &#10;- correct opening and saving of photos and markup files; &#10;- improved functionality of key buttons" />
   </component>
 </project>

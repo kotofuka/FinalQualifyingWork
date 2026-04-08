@@ -68,7 +68,7 @@ public class FileInteractionService implements FileFormatter {
                 new javafx.stage.FileChooser.ExtensionFilter("JPG файлы", "*.jpg", "*.jpeg"),
                 new javafx.stage.FileChooser.ExtensionFilter("Все файлы", "*.*")
         );
-        fileChooser.setInitialFileName(String.format("%s_normalized.png", file.getName().substring(0, file.getName().lastIndexOf("."))));
+        fileChooser.setInitialFileName(String.format("%s.png", file.getName().substring(0, file.getName().lastIndexOf("."))));
 
         javafx.stage.Stage stage = new javafx.stage.Stage();
         java.io.File selectedFile = fileChooser.showSaveDialog(stage);

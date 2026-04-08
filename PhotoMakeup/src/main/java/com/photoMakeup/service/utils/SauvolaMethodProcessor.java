@@ -101,6 +101,7 @@ public class SauvolaMethodProcessor implements RectangleProcessor, ApplyDualThre
                 normalizedStddev.release();
                 factor.release();
                 thresholdMap.release();
+                binary.release();
             }
 
         } finally {
